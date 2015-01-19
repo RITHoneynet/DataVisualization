@@ -1,0 +1,90 @@
+servers:
+    conn:
+        host: localhost
+        source: local
+#        user:
+#        password: topsecret
+#        key:
+        files: /Volumes/RAMDisk/conn.log
+        parser: broconn
+#        color: 0.2, 1.0, 0.2, 1.0
+
+
+#    dns:
+#        host: localhost
+#        source: local
+#        user:
+#        password: topsecret
+#        key:
+#        files: /tmp/dns.log
+#        parser: brodns
+
+#        color: 0.2, 0.2, 1.0, 1.0
+    ssl:
+        host: localhost
+        source: local
+#        user:
+#        password: topsecret
+#        key:
+        files: /Volumes/RAMDisk/ssl.log
+        parser: brossl
+
+    http:
+        host: localhost
+        source: local
+#        user: 
+#        password: topsecret
+#        key:
+        files: /Volumes/RAMDisk/http.log
+        parser: brohttp
+
+config:
+    dimensions: 1024x768
+    min_blob_size: 0.005
+    max_blob_size: 0.02
+    highlight_color: white
+    bounce: true
+    left_column:
+        size: 20
+        alignment: -0.99
+        blocks:
+            SrcIP:
+                order: 0
+                size: 15
+                auto_clean: true
+                color: 1.0, 0.5, 0.0, 1.0
+            Protocol:
+                order: 1
+                size: 3
+                color: 0.0, 1.0, 1.0, 1.0
+            DomainName:
+                order: 2
+                size: 15
+                color: 0.5, 0.0, 1.0, 1.0
+
+
+    right_column:
+        size: 20
+        alignment: 0.99
+        blocks:
+            DstIP:
+                order: 0
+                size: 15
+                auto_clean: true
+                color: 0.2, 0.8, 0.4, 1.0
+            Application:
+                order: 1
+                size: 6
+                color: 1.0, 0.0, 0.5, 1.0
+            SSLCipher:
+                order: 2
+                size: 4
+                color: 1.0, 0.0, 1.0, 1.0
+            SSLVersion:
+                order: 3
+                size: 3
+                color: 1.0, 0.0, 0.0, 1.0
+
+resolver:
+    reverse_ip_lookups: false
+    reverse_timeout: 0.5
