@@ -11,4 +11,4 @@ I have also Included a sample config file `gltail_locale.yaml`. This is set up t
 ## Skyrails
 The Python script used to send data to skyrail requires the `python-sshtail` library to run. You can find it at https://github.com/praekelt/python-sshtail.
 
-I will be adding some documentation on what I Learned about the Skyrails scripting language at a later date.
+I will be adding some documentation on what I learned about the Skyrails scripting language at a later date.
