@@ -1,0 +1,381 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./clearproject;
+g_activecounter = 400000;
+g_pull = 0.02; 
+g_globeness = 0.0005; 
+g_diameter = 1.0;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//global theyear;
+//theyear = "80";
+//global comparing; // comparing from 1980
+//comparing = "false";
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//global country_focusing;
+//country_focusing = false;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c: year -> 80, 85, 90, 94
+sub loadcolors(
+   opencsv ("data/countrycolor.csv") as "countrycolor";
+   with(df: ("countrycolor")) do(
+      for dfline <- 1 .. c:rowsize - 1 do(
+         for dfcol <- 1 .. c:colsize do(
+            // ~l:0 <- country
+            // ~p: 0 c:dfrow <- other country
+            
+            with node:(~l:0) do (
+               realcolor <<# rgb: toint(~l: 1) toint(~l: 2) toint(~l: 3);
+               itemcolor #realcolor;
+            ) end ;
+         ) end;
+      ) end;
+   ) end;
+);
+./loadcolors;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c: year -> 80, 85, 90, 94
+sub loadtrades(
+   if(c:year == null) then (
+      return "error : you did not supply the year argument";
+   ) end;
+   opencsv ("data/worldtrade" + c:year + ".csv") as "worldtrade" + c:year;
+   with(df: ("worldtrade" + c:year)) do(
+      for dfline <- 1 .. c:rowsize - 1 do(
+         for dfcol <- 1 .. c:colsize do(
+            // ~l:0 <- country
+            // ~p: 0 c:dfrow <- other country
+            (~l:0) --trade-> (~p: 0 c:dfcol) :( "money" + c:year <- toint(~l: c:dfcol) ): ;
+         ) end;
+      ) end;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub initcolors (
+   if(true) then (
+      with all nodes do (itemcolor rgb: 30 30 30) end;
+      with sel:activecountries do (
+         itemcolor #realcolor;
+      ) end;
+   ) else (
+      with all nodes do (itemcolor #realcolor; ) end;   
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub linkMoney(
+   return #("money" + c:year);
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub originName(
+   return (linkorigin::itemid);
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub targetName(
+   return (linktarget::itemid);
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub targetColor(
+   return (linktarget::getitemcolor);
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub nodeExportTotal(
+   return #("totalExport" + c:year);
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub nodeImportTotal(
+   return #("totalImport" + c:year);
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:year
+sub obtainMarketShare(
+
+   with all edges as theedge do (
+      if ((linkorigin::./nodeExportTotal) == null )then (
+         linkorigin::("totalExport" + c:year <<# 0);
+      ) end;
+      
+      linkorigin::("totalExport" + c:year <<# ./nodeExportTotal + (c:theedge::./linkMoney));
+      
+      if ((linktarget::./nodeImportTotal) == null )then (
+         linktarget::("totalImport" + c:year <<# 0);
+      ) end;
+      
+      linktarget::("totalImport" + c:year <<# ./nodeImportTotal + (c:theedge::./linkMoney));
+      
+   ) end;
+   
+  
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub useGrowthColor(
+   if(#money80 != 0) then (
+      itemcolor (rgb: 120 60 20) * (#money94 / (#money80 * 4.0));
+      itemdkcolor (rgb: 120 60 20) * (#money94 / (#money80 * 4.0));
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:year
+//edgeSizer <<fx~ AttribEnumer ""(
+//   default -> (
+sub edgeSizer(
+   if (true) then (
+      with all edges do (
+         pullstrength (#("money" + c:year)) * 0.0000002;
+         itemcolor rgb:30 30 30;
+         itemdkcolor rgb:10 10 10;
+         itemhidden true;
+      ) end;
+      with sel:activecountries~* do (
+         itemsize (#("money" + c:year)) * 0.0000002 / c:thecpi;
+         itemtexture name "textures/holedarrow.gif";
+         itemtexture dx (#("money" + c:year)) * 0.000000002;
+         itemhidden false;
+      ) end;
+      with sel:activecountries~* >>> do (
+         if((true)) then(
+            //itemcolor (linkorigin::#realcolor);
+            //itemdkcolor (linkorigin::#realcolor);         
+            ./useGrowthColor;
+         ) else (
+            itemcolor (linkorigin::#realcolor);
+            itemdkcolor (linkorigin::#realcolor);         
+         ) end;
+         
+      ) end;
+   ) else (
+      with all edges do (
+         itemsize (#("money" + c:year)) * 0.0000002 / c:thecpi;
+         //itemcolor rgb: (255 - #count * 3) 60 60;
+   
+         //itemcolor rgb: #migrationcount 60 50;
+         //itemtexture name "textures/pacman.png";
+         itemtexture name "textures/holedarrow.gif";
+         itemtexture dx (#("money" + c:year)) * 0.000000002;
+         pullstrength (#("money" + c:year)) * 0.0000002;
+         if((true)) then (
+            ./useGrowthColor;
+         ) else (
+            itemcolor (linkorigin::getitemcolor);
+            itemdkcolor (linkorigin::getitemcolor);
+         ) end;
+         if (#("money" + c:year)) < 1000000 then
+            itemhidden true
+         else
+            itemhidden false
+         end;
+   
+      ) end;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//sub nodeSizer(
+   //with all nodes do (
+      //itemsize sqrt(./nodeExportTotal / 10000000.0);
+   //) end;
+//);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub nodeCharter(
+   with all nodes as currentnode do (
+      clearcirclechart;
+      
+      circlechart "tradeImports" 0.5 (1.2 + sqrt(./nodeImportTotal / 30000000));
+      chartrotation -90.0;
+      charttotal ./nodeImportTotal * 2;
+      with (c:currentnode)~*<<< as theedge do (
+         c:currentnode::(celvalue (c:theedge::(./originName)) (c:theedge::(./linkMoney)));
+         c:currentnode::(celcolor (c:theedge::(./originName)) (c:theedge::getitemcolor));
+      ) end;
+      
+      circlechart "tradeExports" 0.5 (1.2 + sqrt(./nodeExportTotal / 30000000));
+      chartrotation 90.0;
+      charttotal ./nodeExportTotal * 2;
+      with (c:currentnode)~*>>> as theedge do (
+         c:currentnode::(celvalue (c:theedge::(./targetName)) (c:theedge::(./linkMoney)));
+         if((true)) then (
+            c:currentnode::(celcolor (c:theedge::(./targetName)) (c:theedge::getitemcolor));
+         ) else (
+            c:currentnode::(celcolor (c:theedge::(./targetName)) (c:theedge::(./targetColor)));
+         ) end
+      ) end;
+      
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub calc_cpi(
+   switch("80") do (
+      "80" -> return 1.0;
+      "85" -> return 71.9 / 48.6;
+      "90" -> return 105.5 / 48.6;
+      "94" -> return 111.8 / 48.6;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub resetthefx(
+   with all nodes do (
+      clearbindings;
+   )end;
+
+   ./initcolors;
+   ./edgeSizer [( year <- "80"; thecpi <- ./calc_cpi)] ;
+   ./nodeCharter [( year <- "80")];
+   //./nodeSizer [( year <- $theyear)] ;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// init
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+./loadtrades [(year <- "80")];
+./loadtrades [(year <- "85")];
+./loadtrades [(year <- "90")];
+./loadtrades [(year <- "94")];
+./obtainMarketShare [(year <- "80")];
+./obtainMarketShare [(year <- "85")];
+./obtainMarketShare [(year <- "90")];
+./obtainMarketShare [(year <- "94")];
+
+./initcolors;
+./resetthefx;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_activateLone(
+   country_focusing = true;
+   clearsel activecountries;
+   activecountries <<sel: c:focus;
+   ./resetthefx;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_activateAdd(
+   country_focusing = true;
+   activecountries <<sel: c:focus;
+   ./resetthefx;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_clearcountries(
+   country_focusing = false;
+   clearsel activecountries;
+   ./resetthefx;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+with all nodes do (
+   itemgesture r1 gesture_activateAdd "add focus country";
+   itemgesture r7 gesture_activateLone "lone focus country";
+   itemgesture r9 gesture_clearcountries "reset focus";
+) end;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub enableComparison(
+   comparing = "true";
+   ./resetthefx;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub disableComparison(
+   comparing = "false";
+   ./resetthefx;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef highlightmenu [15](
+   menucolor rgba:0 0 0 100;
+   
+   menutext "year : ";
+   menulink " 1980 " (theyear = "80"; ./resetthefx );
+   menutooltip "time travel back into 1980";
+   menulink " 1985 " (theyear = "85"; ./resetthefx );
+   menutooltip "time travel back into 1985";
+   menulink " 1990 " (theyear = "90"; ./resetthefx );
+   menutooltip "time travel back into 1990";
+   menulink " 1994 " (theyear = "94"; ./resetthefx );
+   menutooltip "time travel back into 1994";
+   menutext " | ";
+   menulink "cmode:" ();
+   menutooltip "enable comparison mode. if on, colors determine the growth of trade";
+   menutooltip "between 1994 from 1980. The brighter, the more growth there was";
+   menulink "on" (./enableComparison);
+   menutext "|";
+   menulink "off" (./disableComparison);
+   menutext " | ";
+   menulink "flatten" (with all nodes do nodeplane z 0 0 end);
+   menutext " | ";
+   
+   menutext " info:";
+   menulink " 1 " ();
+   menutooltip "This project is still under construction.. ";
+   menutooltip "Data provided by Lothar Krempel.";
+   menutooltip "Right click (and hold) on nodes to bring up the context menu";
+   menutooltip "You can concentrate on particular countries that way";
+   
+   menulink " 2 " ();
+   menutooltip "This dataset represents world trades between selected countries";
+   menutooltip "in those years available. The pie charts are divided into two:";
+   menutooltip "The top half represents imports, while the bottom represents";
+   menutooltip "Exports.";
+   
+   menulink " 3 " ();
+   menutooltip "As can be seen, saudi arabia had a lot of exports in 1980, but";
+   menutooltip "this changed in 1985. It went up again during the gulf war in 1990";
+   menutooltip "so SA's export increased again. This is based on my (Yose) memory";
+   menutooltip "top off my head, so might not be 100% accurate.";
+   
+   menulink " 4 " ();
+   menutooltip "Still under construction. Will be complete.. soon..";
+   
+);
+menushow highlightmenu;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub test(
+   with all nodes do(
+      circlechart "whatever" 1.1 1.9;
+      
+      celvalue "15-" 15;
+      celcolor "15-" rgb: 255 0 0;
+      celtexture "15-" "textures/dither.png";
+      
+      celvalue "15s-" 16;
+      celcolor "15s-" rgb: 255 255 0;
+      celtexture "15s-" "textures/dither.png";
+      
+      celvalue "15+-" 30;
+      celcolor "15+-" rgb: 0 255 255;
+      celtexture "15+-" "textures/moku.jpg";
+      
+      celvalue "woah" 50;
+      celcolor "woah" rgb: 120 120 0;
+      celtexture "woah" "textures/plasma.gif";
+      
+      charttotal 50;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef protip [16](
+   menucolor rgba: 60 0 0 100;
+   menutext "protip : right click and hold, on a node, to bring up the mouse menu.";
+   menulink "(hide)" (menuhide protip);
+);
+menushow protip;
+//////////////////////////////////////////////////////////////////////////////////////////////////////

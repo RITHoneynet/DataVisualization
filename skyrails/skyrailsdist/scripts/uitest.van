@@ -1,0 +1,77 @@
+//////////////////////////////////////////////////////////////////////////////////////////
+
+sub testui (
+   ui:conta :: (
+      ui:box1 ::> attach (@ box2, after, after);
+      ui:box2 ::> attach (@ box3, after, after);
+      ui:box3 ::> attach (@ box4, after, before);
+      ui:box4 ::> attach (@ box5, after, before);
+      ui:box3 ::> attach (@ box6, center, after);
+      ui:box6 ::> attach (@ box7, center, after);
+         
+      ui:box1 ::> ( color (@ solid, 0.1); settexture (@ "uitexes/smallbox1.png"); setmargin (@10));
+      ui:box2 ::> ( color (@ solid, 0.2); settexture (@ "uitexes/smallbox2.png"); setmargin (@10));
+      ui:box3 ::> ( color (@ solid, 0.3); settexture (@ "uitexes/smallbox3.png");  setmargin (@10));
+      ui:box4 ::> ( color (@ solid, 0.4); settexture (@ "uitexes/smallbox4.png");  setmargin (@10));
+      ui:box5 ::> ( color (@ solid, 0.5); settexture (@ "uitexes/smallbox1.png");  setmargin (@10));
+      ui:box6 ::> ( color (@ solid, 0.6); settexture (@ "uitexes/smallbox2.png");  setmargin (@10));
+      ui:box7 ::> ( color (@ solid, 0.7); settexture (@ "uitexes/smallbox3.png");  setmargin (@10));
+      
+      maketextlet (@ meh );
+      
+      ui:meh :: (
+         color (@ translucid);
+         menutext "How are you ";
+         menulink "w00t" (trace "how are you");
+      );
+      
+      color (@ solid, 0.6);
+   //   color (@important);
+      settexture (@ "uitexes/largebuttonbox.png");
+      setmargin (@50);
+   //   settexture (@ "boxlets/woman.png");
+   //   settexture (@ "textures/file.gif");
+      
+   //   ui:meh ::> (menuicon "huh" "textures/holedarrow.gif"; mi:size 300 300;);
+      
+   );
+);
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+sub introui (
+   
+   with ui:intro do (
+      color (@ solid, 0.6);
+      settexture (@ "uitexes/largebuttonbox.png");
+      maketextlet (@ logoer);
+      maketextlet (@ menu);
+      setmargin (@50);
+      
+      ui:logoer ::> (
+         color (@translucid);
+         menuicon "logo" "uitexes/skylogo.png";
+         mi:size 500 300;
+         mi:link (with ui:intro do hide(@) end; trace "moo");
+         
+         attach(@menu, center, after);
+         
+      );
+      
+      ui:menu ::> (
+         color (@translucid);
+         menulink "close" (with ui:intro do hide(@)end);
+         menutext "    ";
+         menulink "about" (trace "not done yet");
+         menutext "    ";
+         menulink "help" (trace "no help yet");
+      );
+      
+      
+   ) end;
+   
+);
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//./introui;

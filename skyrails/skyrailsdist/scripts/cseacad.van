@@ -1,0 +1,227 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./clearproject;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+loadfile "data/cseacad.vna";
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+g_activecounter = 400000;
+g_pull = 2.0; 
+g_globeness = 0.0005; 
+g_diameter = 1.0;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+with all nodes do (
+   itemsize sqrt (#pubcount * 0.10) + 1.0;
+//   itemsize 2.0;
+   itemtexture name "textures/smiley.gif";
+   switch #officeloc do (
+      "L5" -> itemcolor rgb:90 90 0;
+      "nicta" -> itemcolor rgb:120 50 0;
+      "ATP" -> itemcolor rgb:140 80 0;
+      "G17" -> itemcolor rgb:170 20 0;
+      "J17" -> itemcolor rgb:190 40 0;
+      "K17-1" -> ( itemcolor rgb:0 0 140; itemtexture name "textures/num1.gif"; );
+      "K17-2" -> ( itemcolor rgb:0 160 60; itemtexture name "textures/num2.gif"; );
+      "K17-3" -> ( itemcolor rgb:0 80 80; itemtexture name "textures/num3.gif"; );
+      "K17-4" -> ( itemcolor rgb:0 30 190; itemtexture name "textures/num4.gif"; );
+      "K17-5" -> ( itemcolor rgb:0 160 90 ; itemtexture name "textures/num5.gif"; );
+      "K17-6" -> ( itemcolor rgb:0 190 20; itemtexture name "textures/num6.gif"; );
+      "other" -> ( itemcolor rgb:200 200 200; );
+   ) end;
+   
+   clearcirclechart;
+   
+   // login to logout
+   circlechart "innerness" 1.0 1.2;
+   celvalue "inner" #innercollabcount;
+   celcolor "inner" rgb: 70 70 70;
+   charttotal #pubcount;
+   
+) end;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+with all edges do(
+   itemsize #pubcount * 0.7 + 0.3;
+   itemcolor rgb:30 30 30;
+   edge:curve 0.4;
+) end;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef cseacadmenu [14](
+   menucolor rgba: 250 250 250 5;
+   menulink " group by office location " (menushow corporatenavmenu);
+   menutooltip "show control panel for selecting by their office location";
+   menulink " attributes " (menushow attributesmenu);
+   menutooltip "show attribute highlighting panel";
+);
+menushow cseacadmenu;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c: theid
+sub selectItem(
+   clearsel moo;
+   moo <<sel: c:theid;
+   usesel moo;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:officeloc
+sub selectGroup(
+   clearsel moo;
+   moo <<sel where #officeloc == c:officeloc;
+   usesel moo;
+   
+   ./searchByGroup;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// functions
+// c:officeloc
+sub macintoshThing (
+
+   menudef pictorialresults [ 18 ] (
+      menucolor rgba: 50 50 50 0;
+      with all nodes do (
+         if(fileexists ("staffimg/" + itemid + ".jpg")) then (
+            menuicon itemid ("staffimg/" + itemid + ".jpg");
+            mi:size 16 16;
+            mi:hoversize 64 96;
+            mi:dynalink ("./selectItem [(theid <- node:" + itemid + ")];");
+            mi:tooltip ("this person is " + itemid);
+         ) end;
+      ) end;
+   );
+
+   menushow pictorialresults;
+   
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// functions
+// c:officeloc
+sub searchByGroup (
+
+   menudef pictorialresults [ 18 ] (
+      menucolor rgba: 50 50 50 0;
+      with all nodes where #officeloc == c:officeloc do (
+         itemchasesize 15.0;
+         if(fileexists ("staffimg/" + itemid + ".jpg")) then (
+            menuicon itemid ("staffimg/" + itemid + ".jpg");
+            mi:size 16 16;
+            mi:hoversize 64 96;
+            mi:dynalink ("./selectItem [(theid <- node:" + itemid + ")];");
+         ) end;
+      ) end;
+   );
+
+   menudef searchresults [ 17 ] (
+      menucolor rgba: 50 50 50 30;
+      with all nodes where #officeloc == c:officeloc do (
+         itemchasesize 15.0;
+         if(fileexists ("staffimg/" + itemid + ".jpg")) then () else (
+            dynalink (" " + itemid + " ") ("./selectItem [(theid <- node:" + itemid + ")];");
+         ) end;
+      ) end;
+      menulink "(hide)" (menuhide searchresults; menuhide pictorialresults);
+   );
+   menushow searchresults;
+   menushow pictorialresults;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef corporatenavmenu [15](
+   menucolor rgba: 0 0 0 100;
+   menutext "select : ";
+   
+   menulink " L5 " (./selectGroup[(officeloc <- "L5")] );
+   menulink " nicta " (./selectGroup[(officeloc <- "nicta")] );
+   menulink " ATP " (./selectGroup[(officeloc <- "ATP")] );
+   menulink " G17 " (./selectGroup[(officeloc <- "G17")] );
+   menulink " J17 " (./selectGroup[(officeloc <- "J17")] );
+   menulink " K17-1 " (./selectGroup[(officeloc <- "K17-1")] );
+   menulink " K17-2 " (./selectGroup[(officeloc <- "K17-2")] );
+   menulink " K17-3 " (./selectGroup[(officeloc <- "K17-3")] );
+   menulink " K17-4 " (./selectGroup[(officeloc <- "K17-4")] );
+   menulink " K17-5 " (./selectGroup[(officeloc <- "K17-5")] );
+   menulink " K17-6 " (./selectGroup[(officeloc <- "K17-6")] );
+
+   
+   menulink " all " (./macintoshThing);
+   menutooltip "show me the macintosh like thing";
+   
+   menulink " camera " (usesel none);
+   menutooltip "select none. back to free view camera";
+   
+   menutext " | ";
+   menulink " (hide) " (menuhide corporatenavmenu);
+   menutooltip "hide this menu";
+   
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub betweennessVertical(
+   with all nodes do nodeplane y (#"Betweenness" / 300.0 - 5.0) same end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub sizeWithCapitals(
+   with all nodes where #capital != 0 do itemsize sqrt(#capital / 200.0) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub sphericalByType(
+   with all nodes do (
+      switch #officeloc do (
+         "L5" -> (nodesphere (3d:0 0 0) c:spheresize 1.0 true;);
+         "nicta" -> (nodesphere (3d:0 0 0) c:spheresize 1.0 true;);
+         "ATP" -> (nodesphere (3d:0 0 0) c:spheresize 1.0 true;);
+         "G17" -> (nodesphere (3d:0 0 0) c:spheresize 1.0 true;);
+         "J17" -> (nodesphere (3d:0 0 0) c:spheresize 1.0 true;);
+         "K17-1" -> (nodeplane y -5.0 same; nodesphere (3d:0 0 0) c:spheresize 1.0 false; );
+         "K17-2" -> (nodeplane y -3.0 same; nodesphere (3d:0 0 0) c:spheresize 1.0 false;);
+         "K17-3" -> (nodeplane y -1.0 same; nodesphere (3d:0 0 0) c:spheresize 1.0 false;);
+         "K17-4" -> (nodeplane y 1.0 same; nodesphere (3d:0 0 0) c:spheresize 1.0 false;);
+         "K17-5" -> (nodeplane y 3.0 same; nodesphere (3d:0 0 0) c:spheresize 1.0 false;);
+         "K17-6" -> (nodeplane y 5.0 same; nodesphere (3d:0 0 0) c:spheresize 1.0 false;);
+         "other" -> (nodesphere (3d:0 0 0) c:spheresize 1.0 true;);
+      ) end;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub lineColors(
+   with all edges do(
+      itemdkcolor (linkorigin::getitemcolor * 0.5);
+      itemcolor (linkorigin::getitemcolor * 0.8);
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub normalColors(
+   with all edges do(
+      itemcolor rgb:30 30 30;
+      itemdkcolor rgb:30 30 30;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef attributesmenu [15](
+   menucolor rgba: 0 0 0 100;
+
+   menulink " spherical " (./sphericalByType [(spheresize <- 10.0)]);
+   menutooltip "arrange all nodes to be positioned on the surface of a sphere.";
+   menutooltip "the executive's nodes will be placed on the ourside while the";
+   menutooltip "companies are put inside"; 
+   
+   menulink " lines " (./lineColors);
+   menutooltip "set line colors to reflect the company type.";
+   
+   menulink " reset " (./normalColors;
+                       with all nodes do clearbindings end);
+   menutooltip "clear all the positional bindings";
+   
+   menutext " | ";
+   menulink " (hide) " (menuhide attributesmenu);
+   menutooltip "hide this menu";
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////

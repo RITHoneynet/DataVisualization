@@ -1,0 +1,294 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./clearproject;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+loadfile "data/macaque.vna";
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+g_activecounter = 400000;
+g_pull = 0.02; 
+g_globeness = 0.0005; 
+g_diameter = 1.0;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// setups
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+with all nodes do (
+   dominationcount <<# 0;
+   dominatedcount <<# 0;
+) end;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+with all edges as theedge do (
+   with linkorigin do(
+      dominationcount <<# #dominationcount + (c:theedge::#value);
+   ) end;
+   
+   with linktarget do(
+      dominatedcount <<# #dominatedcount + (c:theedge::#value);
+   ) end;
+   
+) end;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// functions
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub dominationRankByDegree(
+   with all nodes do nodeplane y ((#"OutDegree" / (#OutDegree + #Indegree)) * 10.0 - 5.0) same end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub dominationRankByRatio(
+   with all nodes do nodeplane y (((tofloat #referringcount)/ (#referringcount + #referredcount)) * 10.0 - 5.0) same end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+with all edges do (
+   pullstrength #value * 0.3;
+   itemsize #value * #value * 0.1;
+   itemtexture name "textures/holedarrow.gif";
+   itemtexture dx #value * 0.01;
+   
+) end;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+with all nodes do (
+   ./dominationRankByDegree;
+) end;
+sub defaultSetup(
+   with all nodes do (
+      itemsize 2.0;
+      itemtexture name "textures/monkey.gif";
+      itemcolor ./lowNumberColorSplit [(num <- #group)];
+   ) end;
+   with all edges do (
+      clearcolors;
+      itemtexture name "textures/holedarrow.gif";
+      itemtexture dx #value * 0.01;
+      itemhidden false;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./defaultSetup;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub dominationHighlight(
+   with all nodes do (
+      itemsize 2.0;
+      itemcolor rgb:20 20 20;
+   ) end;
+   with all edges do (
+      itemcolor rgb:20 20 20;
+      itemhidden true;
+   ) end;
+   
+   with sel:monkeys.* >>> ~* >>> do (
+      itemcolor rgb:30 0 0;
+      itemdkcolor rgb:10 0 0;
+      itemhidden false;
+   ) end;
+   with sel:monkeys.* >>> .* >>> do (
+      itemcolor ./lowNumberColorSplit [(num <- #group)];
+   ) end;
+   
+   with sel:monkeys~* >>> do (
+      itemcolor rgb:120 20 20;
+      itemdkcolor rgb:90 20 20;
+      itemhidden false;
+   ) end;
+   with sel:monkeys.* >>> do (
+      itemcolor ./lowNumberColorSplit [(num <- #group)];
+   ) end;
+   
+   with sel:monkeys do (
+      itemsize 4.0;
+      itemcolor ./lowNumberColorSplit [(num <- #group)];
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_selectMonkey (
+   //usesel moo;
+   clearsel monkeys;
+   moo <<sel: c:focus;
+   ./dominationHighlight;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_selectNone (
+   clearsel monkeys;
+   //usesel none;
+   ./defaultSetup;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_selectMonkeyAdditive (
+   //usesel moo;
+   monkeys <<sel: c:focus;
+   ./dominationHighlight;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_showGroupDomination(
+   monkeys <<sel where #group == (c:focus::#group);
+   ./dominationHighlight;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_camera(
+   usesel none;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+with all nodes do(
+   //itemgesture r1 gesture_selectMonkey "select monkey";
+   itemgesture r1 gesture_selectMonkeyAdditive "show domination";
+   itemgesture r9 gesture_selectNone "reset view";
+   //itemgesture r3 gesture_camera "free cam";
+   itemgesture r7 gesture_showGroupDomination "group domination";
+) end;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef monkeymenu [14](
+   menucolor rgba: 250 250 250 5;
+   menulink " lineage groups " (menushow lineagemenu);
+   menutooltip "show control panel for selecting lineage groups";
+   menulink " individuals " (menushow individualmenu);
+   menutooltip "show control panel for showing individuals";
+   menulink " attributes " (menushow attributesmenu);
+   menutooltip "show attribute highlighting panel";
+   menulink " information " (menushow infomenu);
+   menutooltip "learn more about this file, authors and information";
+);
+menushow monkeymenu;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef infomenu [16](
+   menucolor rgba: 30 30 30 50;
+   menutext " info : ";
+   menulink " 1 " ();
+   menutooltip "The matrix records dominance in a colony of 62 adult female Japanese";
+   menutooltip "macaques (Macaca fuscata fuscata).  They are known as the \"Arashiyama";
+   menutooltip "B group.\"  Records were made during the nonmating season, April to early";
+   menutooltip "October, 1976.  Approach-retreat episodes involving food were recorded.";
+   
+   menulink " 2 " ();
+   menutooltip "Data were reported by Yukio Takahata, \"Diachronic changes in the ";
+   menutooltip "Ddominance relations of adult female Japanese monkeys of the Arashiyama B";
+   menutooltip "Dgroup,\" in Linda Marie Fedigan and Pamela J. Asquith, eds., The Monkeys";
+   menutooltip "Dof Arashiyama.  Albany: State University of New York Press, 1991, pp. ";
+   menutooltip "D124-139.";
+   
+   menulink " 3 " ();
+   menutooltip "There are six lineage groups, separated in this view by their colour ";
+
+   menutext " | ";
+   menulink " (hide) " (menuhide infomenu);
+   menutooltip "hide this menu";
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c: lineagenum
+sub selectLineageGroup(
+   usesel moo;
+   clearsel moo;
+   moo <<sel where #group == c:linnum;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c: theid
+sub selectItem(
+   clearsel moo;
+   moo <<sel: c:theid;
+   usesel moo;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:group
+sub searchByGroup (
+   menudef searchresults [ 17 ] (
+      menucolor rgba: 50 50 50 30;
+      with all nodes where #group == c:linnum do (
+         dynalink (" " + itemid + " ") ("./selectItem [(theid <- \"" + itemid + "\")];");
+         menutooltip ("center view on the " + itemid + " macaque.");
+      ) end;
+      dynalink "(hide)" "menuhide searchresults";
+   );
+   menushow searchresults;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef lineagemenu [15](
+   menucolor rgba: 0 0 0 100;
+   menutext "show : ";
+   menulink " 1 " (./selectLineageGroup[(linnum <- 1)] );
+   menutooltip "navigate the first group";
+   menulink " 2 " (./selectLineageGroup[(linnum <- 2)] );
+   menutooltip "navigate the second group";
+   menulink " 3 " (./selectLineageGroup[(linnum <- 3)] );
+   menutooltip "navigate the third group";
+   menulink " 4 " (./selectLineageGroup[(linnum <- 4)] );
+   menutooltip "navigate the fourth group";
+   menulink " 5 " (./selectLineageGroup[(linnum <- 5)] );
+   menutooltip "navigate the fifth group";
+   menulink " 6 " (./selectLineageGroup[(linnum <- 6)] );
+   menutooltip "navigate the sixth group";
+   
+   menulink " camera " (usesel none);
+   menutooltip "select none. back to free view camera";
+   
+   menutext " | ";
+   menulink " (hide) " (menuhide lineagemenu);
+   menutooltip "hide this menu";
+   
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef individualmenu [15](
+   menucolor rgba: 0 0 0 100;
+   menutext "show : ";
+   menulink " 1 " (./searchByGroup[(linnum <- 1)] );
+   menutooltip "search the first group";
+   menulink " 2 " (./searchByGroup[(linnum <- 2)] );
+   menutooltip "search the second group";
+   menulink " 3 " (./searchByGroup[(linnum <- 3)] );
+   menutooltip "search the third group";
+   menulink " 4 " (./searchByGroup[(linnum <- 4)] );
+   menutooltip "search the fourth group";
+   menulink " 5 " (./searchByGroup[(linnum <- 5)] );
+   menutooltip "search the fifth group";
+   menulink " 6 " (./searchByGroup[(linnum <- 6)] );
+   menutooltip "search the sixth group";
+   
+   menulink " camera " (usesel none);
+   menutooltip "select none. back to free view camera";
+   
+   menutext " | ";
+   menulink " (hide) " (menuhide individualmenu);
+   menutooltip "hide this menu";
+   
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef attributesmenu [15](
+   menucolor rgba: 0 0 0 100;
+   menulink " domd " (./dominationRankByDegree);
+   menutooltip "arrange the nodes so that the height reflects domination.";
+   menutooltip "here, domination is defined as (OutDegree / TotalDegree)";
+   menutooltip "does not take into account the actual values each tie";
+   menulink " domr " (./dominationRankByRatio);
+   menutooltip "arrange the nodes so that the height reflects domination.";
+   menutooltip "similar with the previous mode, except tie values count";
+   menutooltip "towards the calculation.";
+   
+   menulink " betweenness " (./betweennessHorizontal);
+   menutooltip "arrange the nodes so that the horizontal position reflects";
+   menutooltip "on the betweenness (directional) value of the nodes. the";
+   menutooltip "betweenness value was extracted using netdraw"; 
+   
+   menulink " reset " (with all nodes do clearbindings end);
+   menutooltip "undo attribute highlighting";
+   
+   menutext " | ";
+   menulink " (hide) " (menuhide attributesmenu);
+   menutooltip "hide this menu";
+   
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef protip [16](
+   menucolor rgba: 60 0 0 100;
+   menutext "protip : right click and hold, on a node, to bring up the mouse menu.";
+   menulink "(hide)" (menuhide protip);
+);
+menushow protip;
+//////////////////////////////////////////////////////////////////////////////////////////////////////

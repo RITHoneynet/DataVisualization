@@ -1,0 +1,19 @@
+#!/bin/bash
+
+g++ -I. -I/usr/include/SDL -c -o main.o main.cpp
+g++ -Iskyrails -I/usr/include/SDL -c -o skyrails/skyrails.o skyrails/skyrails.cpp
+g++ -Iskyrails -I/usr/include/SDL -c -o skyrails/shapes.o skyrails/shapes.cpp
+g++ -Iskyrails -I/usr/include/SDL -c -o skyrails/shingpos.o skyrails/shingpos.cpp
+g++ -Iskyrails -I/usr/include/SDL -c -o skyrails/object3d.o skyrails/object3d.cpp
+g++ -Iskyrails -I/usr/include/SDL -c -o skyrails/textures.o skyrails/textures.cpp
+g++ -Iskyrails -I/usr/include/SDL -c -o skyrails/colors.o skyrails/colors.cpp
+g++ -Iskyrails -I/usr/include/SDL -c -o skyrails/lights.o skyrails/lights.cpp
+g++ -Iskyrails -I/usr/include/SDL -c -o skyrails/shaders.o skyrails/shaders.cpp
+g++ -Iskyrails -I/usr/include/SDL -c -o skyrails/framefx.o skyrails/framefx.cpp
+g++ -Iglapp -I/usr/include/SDL -c -o glapp/GLApp.o glapp/GLApp.cpp
+g++ -Iglapp -I/usr/include/SDL -c -o glapp/debug_trace.o glapp/debug_trace.cpp
+g++ -c -o libsvl/LibSVL.o libsvl/LibSVL.cpp
+g++ -c -o libsvl/Basics.o libsvl/Basics.cpp
+gcc -DGLEW_STATIC -c -o libglew/glew.o libglew/glew.c
+g++ -Ishing -I/usr/include/SDL -c -o shing/utils.o shing/utils.cpp
+g++ -o first main.o skyrails/skyrails.o skyrails/shapes.o skyrails/shingpos.o skyrails/object3d.o skyrails/textures.o skyrails/colors.o skyrails/lights.o skyrails/shaders.o skyrails/framefx.o glapp/GLApp.o glapp/debug_trace.o libsvl/LibSVL.o libsvl/Basics.o libglew/glew.o shing/utils.o -L. -L/usr/lib -lGL -lGLU -lglut -lSDLmain -lSDL -lSDL_image

@@ -1,0 +1,171 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./clearproject;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+loadfile "data/medicis.vna";
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+g_activecounter = 400000;
+g_pull = 0.2; 
+g_globeness = 0.0005; 
+g_diameter = 1.0;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+with all edges do (
+   if(#marriage == 1) then (
+      linkorigin <- marriage -> linktarget;
+   ) end;
+   if(#business == 1) then (
+      linkorigin <- business -> linktarget;
+   ) end;
+) end;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub resetWidths (
+   with all edges do(
+      itemsize 0.0;
+      pullstrength 0.0;
+      switch linktype do (
+         marriage -> (itemsize 2.0;
+                      itemcolor rgb: 130 0 0;
+                      pullstrength 1.0; );
+         business -> (itemsize 2.0;
+                      itemcolor rgb: 0 130 0;
+                      pullstrength 1.0; );
+      ) end;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./resetWidths;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c: theid
+sub selectItem(
+   clearsel moo;
+   moo <<sel: c:theid;
+   usesel moo;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// functions
+sub searchAll (
+   menudef searchresults [ 17 ] (
+      menucolor rgba: 50 50 50 30;
+      with all nodes do (
+         dynalink (" " + itemid + " ") ("./selectItem [(theid <- \"" + itemid + "\")];");
+         menutooltip ("center view on the " + itemid + " node.");
+      ) end;
+      dynalink "(hide)" "menuhide searchresults";
+   );
+   menushow searchresults;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef medicismenu [14](
+   menucolor rgba: 250 250 250 5;
+   menulink " nodes " (./searchAll);
+   menutooltip "center the view on particular medicis";
+   menulink " camera " (usesel none);
+   menutooltip "select none. back to free view camera";
+   menulink " attributes " (menushow attributesmenu);
+   menutooltip "show attribute highlighting panel";
+   menulink " information " (menushow infomenu);
+   menutooltip "learn more about this file, authors and information";
+);
+menushow medicismenu;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef infomenu [16](
+   menucolor rgba: 30 30 30 50;
+   menutext " info : ";
+   menulink " 1 " ();
+   menutooltip "Breiger & Pattison (1986), in their discussion of local role analysis, use a ";
+   menutooltip "subset of data on the social relations among Renaissance Florentine families ";
+   menutooltip "(person aggregates) collected by John Padgett from historical documents. The ";
+   menutooltip "two relations are business ties (PADGB - specifically, recorded financial ties";
+   menutooltip "such as loans, credits and joint partnerships) and marriage alliances (PADGM).";
+   
+   menulink " 2 " ();
+   menutooltip "As Breiger & Pattison point out, the original data are symmetrically coded.";
+   menutooltip "This is acceptable perhaps for marital ties, but is unfortunate for the ";
+   menutooltip "financial ties (which are almost certainly directed). To remedy this, the";
+   menutooltip "financial ties can be recoded as directed relations using some external";
+   menutooltip "measure of power - for instance, a measure of wealth.";
+   
+   menulink " 3 " ();
+   menutooltip "The families' net wealth in 1427 can be visualised, with the node sizes able";
+   menutooltip "to be used to reflect this value. The number of priorates can be displayed on";
+   menutooltip "a rotation chart, where a full rotation indicates 50000 priorates. Finally,";
+   menutooltip "the total number of business or marriage ties can be used to alter the node";
+   menutooltip "height.";
+   
+   menulink " 4 " ();
+   menutooltip "Substantively, the data include families who were locked in a struggle for ";
+   menutooltip "political control of the city of Florence in around 1430. Two factions were ";
+   menutooltip "dominant in this struggle: one revolved around the infamous Medicis (9), the";
+   menutooltip "other around the powerful Strozzis (15).";
+   
+   menulink " R " ();
+   menutooltip "References:";
+   menutooltip "Breiger R. and Pattison P. (1986). Cumulated social roles:";
+   menutooltip "  The duality of persons and their algebras. Social Networks, 8, 215-256.";
+   menutooltip "Kent D. (1978). The rise of the Medici: Faction in Florence, 1426-1434.";
+   menutooltip "  Oxford: Oxford University Press.";
+   
+
+   menutext " | ";
+   menulink " (hide) " (menuhide infomenu);
+   menutooltip "hide this menu";
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub wealthSize(
+   with all nodes do (
+      itemsize sqrt(#wealth / 20000.0);
+      itemmass sqrt(#wealth / 50000.0);
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub priorChart(
+   with all nodes do(
+   
+      clearcirclechart;
+   
+      // login to logout
+      circlechart "priors" 1.0 1.2;
+      celvalue "priors" #priors;
+      celcolor "priors" rgb: 90 90 00;
+      charttotal 50000;
+      
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub tiesVertical(
+   with all nodes do(
+      nodeplane y #ties / 10000.0 - 4.0 same;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef attributesmenu [15](
+   menucolor rgba: 0 0 0 100;
+   menulink " wealth " (./wealthSize);
+   menutooltip "Make the node size reflect the company's net wealth in 1427";
+   menutooltip "(in thousands of lira)";
+   
+   menulink " priorates " (./priorChart);
+   menutooltip "The number of priorates (seats in the civic council) held between";
+   menutooltip "1282 - 1344. Each rotation of the chart represents 50000 seats.";
+   
+   menulink " ties " (./tiesVertical);
+   menutooltip "Arrange the heights to reflect the total number of business or mariage ties"; 
+   menutooltip "in the total dataset of 116 families (see Breiger & Pattison (1986), p. 239)"; 
+   
+   menulink " reset " (resetfx; ./resetWidths);
+   menutooltip "clear all attribute highlighting.";
+   
+   menutext " | ";
+   menulink " (hide) " (menuhide attributesmenu);
+   menutooltip "hide this menu";
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////

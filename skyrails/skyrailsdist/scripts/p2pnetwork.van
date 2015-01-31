@@ -1,0 +1,161 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./clearproject;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+openserver 1330;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:name <-- name of the node
+sub setRingPlane(
+   with node:(c:name) do (
+      nodeplane z -0.3 0.3;
+      nodesphere (3d:0 0 0) 6.0 1.0 false;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:name <-- name of the node
+sub declareNode(
+   with node:(c:name) do (
+      itemsize 3.0; 
+      itemchasesize 7.0;
+      itemtexture name "textures/computer.gif";
+      itemcolor rgb:50 50 50;
+      itemflashcolor rgb:250 0 0;
+   ) end;
+//   ./setRingPlane;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c: name
+// c: r, g, b
+sub flashNode(
+   with node:(c:name) do (
+      itemchasesize 12.0;
+      itemflashcolor rgb:(c:r) (c:g) (c:b);
+   ) end;   
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:name
+// c:x, c:y, c:z
+sub setNodePosition(
+   ./declareNode;
+   with node:(c:name) do (
+      clearbindings;
+      nodeplane x (c:x) (c:x);
+      nodeplane y (c:y) (c:y);
+      nodeplane z (c:z) (c:z);
+   ) end;   
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:name <-- name of the node
+sub minorDeclaration(
+   with node:(c:name) do (
+      itemsize 3.0; 
+      itemchasesize 4.0;
+      itemtexture name "textures/computer.gif";
+      itemcolor rgb:50 50 50;
+      itemflashcolor rgb:250 0 0;
+   ) end;
+//   ./setRingPlane;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:pred, c:succ // who's the predecessor, who's the successor
+sub declareConnection(
+   ./declareNode [( name <- c:pred )];
+   ./declareNode [( name <- c:succ )];
+   with (c:pred -- successor -> c:succ) do (
+      itemtexture name "textures/holedarrow.gif";
+      itemcolor rgb:60 60 20;
+      itemflashcolor rgb:250 250 0;
+      itemdkcolor rgb: 20 20 20;
+      itemdarkflashcolor rgb:250 250 0;
+      itemsize 4.0;
+      itemchasesize 14.0;
+      pullstrength 3.0;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:pred, c:succ
+sub closeConnection(
+   ./declareNode [( name <- c:pred )];
+   ./declareNode [( name <- c:succ )];
+   with (c:pred -- successor -> c:succ) do (
+      itemtexture name "textures/holedarrow.gif";
+      itemcolor rgb:20 20 20;
+      itemflashcolor rgb:250 0 0;
+      itemdkcolor rgb: 20 20 20;
+      itemdarkflashcolor rgb:250 0 0;
+      itemsize 0.0;
+      itemchasesize 7.0;
+      pullstrength 3.0;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c: node1, c:node2
+sub routingCall(
+   ./minorDeclaration [( name <- c:node1 )];
+   ./minorDeclaration [( name <- c:node2 )];
+   with (c:node1 -- routing -> c:node2) do (
+   
+      if (#count == null) then (
+         count <<# 0;
+      ) end;
+      
+      count <<# (#count + 1);
+   
+      itemtexture name "textures/holedarrow.gif";
+      itemcolor rgb:10 30 30;
+      itemflashcolor rgb:250 250 0;
+      itemdkcolor rgb: 10 20 20;
+      itemdarkflashcolor rgb:250 250 0;
+      itemsize #count * 0.1;
+      itemchasesize #count * 0.02 + 6.0;
+      pullstrength 0.0;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c: node1, c:node2, c:methodname, c:methodcolor
+sub methodCall(
+   ./minorDeclaration [( name <- c:node1 )];
+   ./minorDeclaration [( name <- c:node2 )];
+   
+   [( thecolor <- ./lowNumberColorSplit [( num <- 3 )] )] with (
+   
+      with (c:node1 -- (c:methodname) -> c:node2) do (
+      
+         if (#count == null) then (
+            count <<# 0;
+         ) end;
+         
+         count <<# (#count + 1);
+      
+         itemtexture name "textures/holedarrow.gif";
+         itemcolor rgb:20 20 20;
+         itemflashcolor c:thecolor;
+         itemdkcolor rgb:20 20 20;
+         itemdarkflashcolor c:thecolor;
+         itemsize #count * 0.1;
+         itemchasesize #count * 0.1 + 20.0;
+         //pullstrength #count * 0.02;
+         pullstrength 0.0;
+         
+      ) end;
+      
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+g_activecounter = 400000;
+g_pull = 0.52; 
+g_globeness = 0.0005; 
+g_diameter = 1.0;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+

@@ -1,0 +1,738 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./clearproject;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// cse lab data script file
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// effects
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   sub appearanceSetter (
+      with all nodes do (itemsize 3.0; itemtexture name "textures/computer.gif"; ) end;
+   );
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   sub compSizer(
+      with all nodes do (itemsize sqrt(./allday * 0.0000015);
+                        ) end;
+   );
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   sub labEdgeHighlighter (
+      with all edges do ( 
+         //itemcolor rgb: #migrationcount 60 50;
+         itemdkcolor (linkorigin::getitemcolor * 0.5);
+         itemcolor (linkorigin::getitemcolor * 0.8);
+         itemsize #migrationcount * 0.2;
+         //itemtexture name "textures/pacman.png";
+         itemtexture name "textures/holedarrow.gif";
+         itemtexture dx #migrationcount * 0.002;
+         pullstrength #migrationcount * #migrationcount * 0.02;
+      ) end;
+   );
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub arrowedEdges(
+   with all edges do (
+      clearcolors;
+      itemtexture name "textures/holedarrow.gif";
+      itemtexture dx #migrationcount * 0.002;
+      pullstrength #migrationcount * #migrationcount * 0.02;
+      itemsize #migrationcount * 0.2;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub onlyThickEdges(
+   with all edges do (
+      clearcolors;
+      pullstrength #migrationcount * #migrationcount * 0.02;
+      itemsize #migrationcount * 0.2;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub thinEdges(
+   with all edges do (clearcolors; itemsize 1.0; pullstrength 1.0) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   sub labHighlighter (
+      with all nodes do (
+         switch #labname do (
+         "book" -> (itemcolor rgb: 150 150 150;);
+         
+         "consultg" -> (itemcolor rgb: 60 60 60;);
+         
+         "leaf" ->   (itemcolor rgb: 120 20 20;);
+         "moog" ->   (itemcolor rgb: 130 50 0;);
+         "spoons" -> (itemcolor rgb: 100 0 30;);
+         "bell" ->   (itemcolor rgb: 170 0  0;);
+         
+         "banjo" ->  (itemcolor rgb: 50 50 130;);
+         "oud" ->    (itemcolor rgb: 80 80 100;);
+         
+         "piano" ->  (itemcolor rgb: 0 200 0;);
+         "clavier" ->(itemcolor rgb: 0 170 50;);
+         
+         "pipe" ->   (itemcolor rgb: 0 40 140;);
+         "bugle" ->  (itemcolor rgb: 20 60 100;);
+         
+         "oboe" ->   (itemcolor rgb: 120 20 160; );
+         "drum" ->   (itemcolor rgb: 100 10 140; );
+         "harp" ->   (itemcolor rgb: 100 70 100; );
+         "tuba" ->   (itemcolor rgb: 130 120 60; );
+         ) end;
+      ) end;
+   );
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   sub funkySpherer (
+      with all nodes do 
+         switch #labname do(
+         "book" -> (nodeplane y 0.0 0.0; nodesphere (3d:0 0 0) 4.0 1.0 true;);
+      
+         "banjo" ->  (nodeplane y 0.0 -6.0; nodeplane x 0.0 10.0;  nodesphere (3d:0 3 0) 7.5 1.0 true;);
+         "oud" ->    (nodeplane y 0.0 -6.0; nodeplane x 0.0 -10.0; nodesphere (3d:0 3 0) 7.5 1.0 true;);
+         "pipe" ->   (nodeplane y 0.0 6.0;  nodeplane x 0.0 10.0;  nodesphere (3d:0 -3 0) 7.5 1.0 true;);
+         "bugle" ->  (nodeplane y 0.0 6.0;  nodeplane x 0.0 -10.0; nodesphere (3d:0 -3 0) 7.5 1.0 true;);
+         
+         "consultg" ->  (nodeplane y 0.0 0.0;);
+         "piano" ->     (nodeplane y 0.0 0.0;);
+         "clavier" ->   (nodeplane y 0.0 0.0;);
+         
+         "leaf" ->   (nodeplane y -4.0 -18.0; nodeplane x 0.0 10.0;  nodeplane z 0.0 -10.0; nodesphere (3d:0 9 0) 17.5 1.0 true;);
+         "moog" ->   (nodeplane y -4.0 -18.0; nodeplane x 0.0 -10.0; nodeplane z 0.0 10.0;  nodesphere (3d:0 9 0) 17.5 1.0 true;);
+         "spoons" -> (nodeplane y -4.0 -18.0; nodeplane x 0.0 10.0;  nodeplane z 0.0 10.0;  nodesphere (3d:0 9 0) 17.5 1.0 true;);
+         "bell" ->   (nodeplane y -4.0 -18.0; nodeplane x 0.0 -10.0; nodeplane z 0.0 -10.0; nodesphere (3d:0 9 0) 17.5 1.0 true;);
+         
+         "oboe" ->   (nodeplane y 4.0 18.0;   nodeplane x 0.0 10.0;  nodeplane z 0.0 -10.0; nodesphere (3d:0 -9 0) 17.5 1.0 true;);
+         "drum" ->   (nodeplane y 4.0 18.0;   nodeplane x 0.0 -10.0; nodeplane z 0.0 10.0;  nodesphere (3d:0 -9 0) 17.5 1.0 true;);
+         "harp" ->   (nodeplane y 4.0 18.0;   nodeplane x 0.0 10.0;  nodeplane z 0.0 10.0;  nodesphere (3d:0 -9 0) 17.5 1.0 true;);
+         "tuba" ->   (nodeplane y 4.0 18.0;   nodeplane x 0.0 -10.0; nodeplane z 0.0 -10.0; nodesphere (3d:0 -9 0) 17.5 1.0 true;);
+         ) end 
+       end;
+   );
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   sub labSpherer (
+      with all nodes do switch #labname do (
+      "consultg" -> (nodesphere (3d:0 0 0) 3.0 1.0 true;);
+   
+      "book" -> (nodesphere (3d:0 0 0) 6.0 1.0 true;);
+      
+      "leaf" ->   (nodesphere (3d:0 0 0) 9.0 1.0 true;);
+      "moog" ->   (nodesphere (3d:0 0 0) 9.5 1.0 true;);
+      "spoons" -> (nodesphere (3d:0 0 0) 10.0 1.0 true;);
+      "bell" ->   (nodesphere (3d:0 0 0) 10.5 1.0 true;);
+      
+      "banjo" ->  (nodesphere (3d:0 0 0) 7.5 1.0 true;);
+      "oud" ->    (nodesphere (3d:0 0 0) 7.5 1.0 true);
+      
+      "piano" ->  (nodesphere (3d:0 0 0) 6.0 1.0 true;);
+      "clavier" ->(nodesphere (3d:0 0 0) 6.0 1.0 true;);
+   
+      "pipe" ->   (nodesphere (3d:0 0 0) 8.5 1.0 true;);
+      "bugle" ->  (nodesphere (3d:0 0 0) 8.5 1.0 true;);
+      
+      "oboe" ->   (nodesphere (3d:0 0 0) 11.0 1.0 true; );
+      "drum" ->   (nodesphere (3d:0 0 0) 11.5 1.0 true; );
+      "harp" ->   (nodesphere (3d:0 0 0) 12.0 1.0 true; );
+      "tuba" ->   (nodesphere (3d:0 0 0) 12.5 1.0 true; );
+      ) end end;
+   );
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   sub allday (
+      if(#alldaycache == null) then (
+      alldaycache <<# #hour00 + #hour01 + #hour02 + #hour03 + #hour04 + #hour05 +
+                  #hour06 + #hour07 + #hour08 + #hour09 + #hour10 + #hour11 +
+                  #hour12 + #hour13 + #hour14 + #hour15 + #hour16 + #hour17 +
+                  #hour18 + #hour19 + #hour20 + #hour21 + #hour22 + #hour23; 
+      ) end;
+      return #alldaycache;
+   );
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   sub dayq1 (
+      if(#dayq1cache == null) then (
+      dayq1cache <<# #hour00 + #hour01 + #hour02 + #hour03 + #hour04 + #hour05; 
+      ) end;
+      return #dayq1cache;
+   );
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   sub dayq2 (
+      if(#dayq2cache == null) then (
+      dayq2cache <<# #hour06 + #hour07 + #hour08 + #hour09 + #hour10 + #hour11; 
+      ) end;
+      return #dayq2cache;
+   );
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   sub dayq3 (
+      if(#dayq3cache == null) then (
+      dayq3cache <<# #hour12 + #hour13 + #hour14 + #hour15 + #hour16 + #hour17; 
+      ) end;
+      return #dayq3cache;
+   );
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+   sub dayq4 (
+      if(#dayq4cache == null) then (
+      dayq4cache <<# #hour18 + #hour19 + #hour20 + #hour21 + #hour22 + #hour23; 
+      ) end;
+      return #dayq4cache;
+   );
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//   labPositional <<fx~ AttribEnumer "*Mode"(
+//      "Computer" -> (nodeplane y (./allday * 0.000005 ) same;
+//                     nodeinfo 0 (./allday + " seconds");
+//                     )
+//   );
+   
+   sub labPositional(
+      with all nodes do (
+         switch #"*Mode" do (
+         "Computer" -> (nodeplane y (./allday * 0.000005 ) same;
+                        nodeinfo 0 (./allday + " seconds");
+                        )
+         ) end;
+      ) end;
+   );
+   
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//   labPositionalHourly <<fx~ AttribEnumer "*Mode"(
+//      "Computer" -> (nodeplane y (#("hour" + c:hour) * 0.00005 ) same;
+//                     nodeinfo 0 ("hour" + c:hour + " : " + #("hour" + c:hour));
+//                     )
+//   );
+   
+   sub labPositionalHourly(
+      with all nodes do (
+         switch #"*Mode" do (
+         "Computer" -> (nodeplane y (#("hour" + c:hour) * 0.00005 ) same;
+                        nodeinfo 0 ("hour" + c:hour + " : " + #("hour" + c:hour));
+                        )
+         ) end;
+      ) end;
+   );
+   
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub usagePositional(
+   ./labPositional;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub resetPositionals(
+   with all nodes do clearbindings end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub loginPositional (
+   with all nodes do nodeplane x #logincount / 150.0 same end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// menu
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef labprojectmenu [14](
+   menucolor rgba:0 0 0 100;
+   menutext " lab project : ";
+   menulink " displaymodes " (menushow highlightmenu);
+   menutooltip "open the display modes menu";
+   menulink " usages " (menushow hourindicatorsmenu);
+   menutooltip "open the usage summary menu";
+   menulink " navigation " (menushow navigatemenu);
+   menutooltip "open the lab navigation menu";
+   menulink " charts " (menushow chartmenu);
+   menutooltip "open the charts menu";
+);
+menushow labprojectmenu;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub resetDisplayHighlights (
+   with all nodes do (clearcolors; itemsize 1.0) end; 
+   with all edges do (clearcolors; itemsize 1.0; pullstrength 1.0) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef highlightmenu [15](
+   menucolor rgba:0 0 0 100;
+   menulink " icons " (./labHighlighter; ./appearanceSetter; ./labEdgeHighlighter);
+   menutooltip "enable coloured and iconic display";
+   menulink " sizes " (./compSizer;);
+   menutooltip "set size of nodes to reflect their total hour usage";
+   menulink " reset " (./resetDisplayHighlights);
+   menutooltip "reset size and colors";
+   menutext " | ";
+   
+   menulink " a " (./funkySpherer);
+   menutooltip "a preorganized spherical layout that arranges nodes based on their labs";
+   menutooltip "the node ties still plays a role in local layouting";
+   menulink " p " (./labSpherer);
+   menutooltip "an alternate spherical layout that arranges nodes based on their labs";
+   menutooltip "the node ties still plays a role in local layouting";
+   menutext " | ";
+   menulink " reset " (with all nodes do clearbindings end);
+   menutooltip "reset all positional bindings";
+   menutext " | ";
+   menulink " (hide) " (menuhide highlightmenu);
+   menutooltip "hide this menu";
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef hourindicatorsmenu [15](
+   menucolor rgba:0 0 0 100;
+   menulink " sum " (./labPositional);   
+   menutooltip "bind the vertical position of computer nodes based on their total hour usage";
+   menutooltip "the higher the node is, the more used that computer is";
+   
+   menutext "am:";
+   
+   menulink "0" (./labPositionalHourly [( hour <- "00")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 12 midnight to 1am";
+   menulink "1" (./labPositionalHourly [( hour <- "01")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 1am to 2am";
+   menulink "2" (./labPositionalHourly [( hour <- "02")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 2am to 3am";
+   menulink "3" (./labPositionalHourly [( hour <- "03")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 3am to 4am";
+   menulink "4" (./labPositionalHourly [( hour <- "04")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 4am to 5am";
+   menulink "5" (./labPositionalHourly [( hour <- "05")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 5am to 6am";
+   menulink "6" (./labPositionalHourly [( hour <- "06")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 6am to 7am";
+   menulink "7" (./labPositionalHourly [( hour <- "07")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 7am to 8am";
+   menulink "8" (./labPositionalHourly [( hour <- "08")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 8am to 9am";
+   menulink "9" (./labPositionalHourly [( hour <- "09")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 9am to 10am";
+   menulink "a" (./labPositionalHourly [( hour <- "10")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 10am to 11am";
+   menulink "b" (./labPositionalHourly [( hour <- "11")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 11am to 12 noon";
+   
+   menutext " pm:";
+   
+   menulink "0" (./labPositionalHourly [( hour <- "12")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 12 noon to 1pm";
+   menulink "1" (./labPositionalHourly [( hour <- "13")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 1pm to 2pm";
+   menulink "2" (./labPositionalHourly [( hour <- "14")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 2pm to 3pm";
+   menulink "3" (./labPositionalHourly [( hour <- "15")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 3pm to 4pm";
+   menulink "4" (./labPositionalHourly [( hour <- "16")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 4pm to 5pm";
+   menulink "5" (./labPositionalHourly [( hour <- "17")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 5pm to 6pm";
+   menulink "6" (./labPositionalHourly [( hour <- "18")] );
+   menutooltip "bind the vertical position to reflect total hour usage between 6pm to 7pm";
+   menulink "7" (./labPositionalHourly [( hour <- "19")] );         
+   menutooltip "bind the vertical position to reflect total hour usage between 7pm to 8pm";
+   menulink "8" (./labPositionalHourly [( hour <- "20")] );         
+   menutooltip "bind the vertical position to reflect total hour usage between 8pm to 9pm";
+   menulink "9" (./labPositionalHourly [( hour <- "21")] );         
+   menutooltip "bind the vertical position to reflect total hour usage between 9pm to 10pm";
+   menulink "a" (./labPositionalHourly [( hour <- "22")] );         
+   menutooltip "bind the vertical position to reflect total hour usage between 10pm to 11pm";
+   menulink "b" (./labPositionalHourly [( hour <- "23")] );         
+   menutooltip "bind the vertical position to reflect total hour usage between 11pm to 12 midnight";
+   menutext " | ";
+   menulink " logins " (./loginPositional);
+   menutooltip "bind the horizontal position to reflect total logins";
+   menutext " | ";
+   menulink " rst " (with all nodes do clearbindings end);
+   menutooltip "reset all positional bindings";
+   menutext " | ";
+   menulink " (hide) " (menuhide hourindicatorsmenu);
+   menutooltip "hide this menu";
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub viewlab (
+   usesel moo;
+   clearsel moo;
+   moo <<sel~ c:labname;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef navigatemenu [15](
+   menucolor rgba:0 0 0 0;
+   menulink "harp" (./viewlab [(labname <- "harp")] ;);
+   menutooltip "set camera on the harp lab";
+   
+   menulink "tuba" (./viewlab [(labname <- "tuba")] ;);
+   menutooltip "set camera on the tuba lab";
+   
+   menulink "drum" (./viewlab [(labname <- "drum")] ;);
+   menutooltip "set camera on the drum lab";
+   
+   menulink "oboe" (./viewlab [(labname <- "oboe")] ;);
+   menutooltip "set camera on the oboe lab";
+   
+   menutext " ";
+   menulink "leaf" (./viewlab [(labname <- "leaf")] ;);
+   menutooltip "set camera on the leaf lab";
+   
+   menulink "moog" (./viewlab [(labname <- "moog")] ;);
+   menutooltip "set camera on the moog lab";
+   
+   menulink "spoons" (./viewlab [(labname <- "spoons")] ;);
+   menutooltip "set camera on the spoons lab";
+   
+   menulink "bell" (./viewlab [(labname <- "bell")] ;);
+   menutooltip "set camera on the bell lab";
+   
+   menutext " ";   
+   menulink "pipe" (./viewlab [(labname <- "pipe")] ;);
+   menutooltip "set camera on the pipe lab";
+   
+   menulink "bugle" (./viewlab [(labname <- "bugle")] ;);
+   menutooltip "set camera on the bugle lab";
+   
+   menutext " ";   
+   menulink "banjo" (./viewlab [(labname <- "banjo")] ;);
+   menutooltip "set camera on the banjo lab";
+   
+   menulink "oud" (./viewlab [(labname <- "oud")] ;);
+   menutooltip "set camera on the oud lab";
+   
+   menulink "piano" (./viewlab [(labname <- "piano")] ;);
+   menutooltip "set camera on the piano lab";
+   
+   menulink "clavier" (./viewlab [(labname <- "clavier")] ;);
+   menutooltip "set camera on the clavier lab";
+   
+   menutext " ";
+   menulink "book" (./viewlab [(labname <- "book")] ;);
+   menutooltip "set camera on the booking computers";
+   
+   menulink "consult" (./viewlab [(labname <- "consultg")] ;);
+   menutooltip "set camera on the consult computers";
+   
+   menutext " ";
+   menulink "clear" (usesel none;);
+   menutooltip "clear camera selection";
+   menutext " | ";
+   menulink "(hide)" (menuhide navigatemenu);
+   menutooltip "hide this menu";
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef chartmenu [15](
+   menucolor rgba:0 0 0 0;
+   menulink " loginchart " (./showloginchart);
+   menutooltip "show the login chart of the computers. indicates the number of logins recorded.";
+   menutooltip "each full rotation indicates 1500 logins";
+   menulink " hoggingchart " (./showhoggingchart);
+   menutooltip "show the hogging chart of the computers, of how much some users use the computer.";
+   menutooltip "yellow indicates percentage of time used by top 10 users of the computer";
+   menutooltip "next segment shows the next best 10 users of the computer. accumulatively, top 20";
+   menutooltip "next, the next best 30 users of the computer. accumulatively, top 50";
+   menutooltip "and last, accumulatively, top 100";
+   
+   menulink " hourtcharts " (./showhourcharts);
+   menutooltip "show the hour distribution charts of the computer usage";
+   menutooltip "outer circle is divided by 4 segments. brown = midnight - 6am";
+   menutooltip "red = 6am - noon, yellow = noon - 6pm, black = 6pm - midnight";
+   menutext " ";
+   
+   menulink " clearcharts " (with all nodes do clearcirclechart end);
+   menutooltip "clear all charts";
+   menutext " ";
+   
+   menulink "(hide)" (menuhide chartmenu);
+   menutooltip "hide this menu";
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//#hournum
+sub hourstringname(
+   if(c:hournum < 10) then(
+      return "hour0" + c:hournum
+   ) end;
+   return "hour" + c:hournum;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub showloginchartIndiv(
+   clearcirclechart;
+   
+   // login to logout
+   circlechart "loginlogout" 1.0 1.2;
+   celvalue "loggedin" #logincount;
+   celcolor "loggedin" rgb: 90 90 00;
+   charttotal 1500;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub showloginchart(
+   with all nodes do(
+   
+      ./showloginchartIndiv;
+      
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub showhoggingchartIndiv(
+      clearcirclechart;
+   
+      // usages
+      circlechart "usagediv" 1.0 1.3;
+      celvalue "usage10" #top10combine;
+      celcolor "usage10" rgb:120 80 00;
+      
+      celvalue "usage20" #top20combine - #top10combine;
+      celcolor "usage20" rgb:70 00 00;
+      
+      celvalue "usage50" #top50combine - #top20combine;
+      celcolor "usage50" rgb:20 00 00;
+
+      celvalue "usage100" #top100combine - #top50combine;
+      celcolor "usage100" rgb:10 00 00;
+      charttotal ./allday;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub showhoggingchart(
+   with all nodes do(
+      ./showhoggingchartIndiv;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub showfullhourchartsIndiv(
+
+   clearcirclechart;   
+   
+   circlechart "hourdist" 1.0 1.2;
+   for hournum <- 0 .. 24 do (
+      celvalue ("usage" + ./hourstringname) 1.0;
+      celfactor ("usage" + ./hourstringname) (#(./hourstringname) / 70000.0);
+      if(c:hournum % 6 == 0) then(
+         celcolor ("usage" + ./hourstringname) rgb: 130 0 0;
+      ) else (
+         celcolor ("usage" + ./hourstringname) rgb: 0 0 0;
+      ) end;
+      
+      celcolor ("usage" + ./hourstringname) rgb: c:hournum%6 * 20 ((c:hournum%6 - 3) * 20) 0;
+      
+   ) end;
+
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub showfullhourcharts(
+   with all nodes do(
+
+      ./showfullhourchartsIndiv;
+
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub showhourchartsIndiv(
+   clearcirclechart;   
+      
+   circlechart "daydist" 1.0 1.2;
+   celvalue "usageq1" ./dayq1;
+   celcolor "usageq1" rgb: 20 20 00;
+      
+   celvalue "usageq2" ./dayq2;
+   celcolor "usageq2" rgb: 80 0 0;
+      
+   celvalue "usageq3" ./dayq3;
+   celcolor "usageq3" rgb: 80 80 10;
+   
+   celvalue "usageq4" ./dayq4;
+   celcolor "usageq4" rgb: 0 00 00;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub showhourcharts(
+   with all nodes do(
+
+      ./showhourchartsIndiv;
+
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_selectlab(
+   usesel moo;
+   clearsel moo;
+   moo <<sel: c:focus;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_expand(
+   with c:focus do (
+      expandgroup #groupname;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_collapse(
+   with c:focus do (
+      collapsegroup #labname;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_showloginchart(
+   with c:focus do ./showloginchartIndiv end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_showhoggingchart(
+   with c:focus do ./showhoggingchartIndiv end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_showhourchart(
+   with c:focus do ./showhourchartsIndiv end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_showfullhourchart(
+   with c:focus do ./showfullhourchartsIndiv end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_clearchart(
+   with c:focus do clearcirclechart end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_centrefocus(
+   with all nodes do (
+      clearbindings;
+      if(#labname == ((c:focus)::#labname)) then (
+         nodesphere (3d:0 0 0) 4.0 0.4 true;
+         nodeplane y -3.0 3.0;
+      ) else (
+         nodesphere (3d:0 0 0) 10.0 0.2 true;
+         nodeplane y -6.0 6.0;
+      ) end;
+   ) end;
+   with c:focus do (nodeplane x 0 0; nodeplane y 0 0; nodeplane z 0 0; nodesphere (3d:0 0 0) 0.0 1.0 false) end;
+   ./gesture_selectlab;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_sphericalfocus(
+   with all nodes do (
+      clearbindings;
+      if(#labname == ((c:focus)::#labname)) then (
+         nodesphere (3d:0 0 0) 12.0 1.0 true;
+         nodeplane x -10.0 10.0;
+      ) else (
+         nodesphere (3d:0 0 0) 9.0 0.4 false;
+         nodeplane x -7.0 7.0;
+      ) end;
+   ) end;
+   with c:focus do (nodesphere (3d:0 0 0) 14.0 1.0 true) end;
+   ./gesture_selectlab;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_planarfocus(
+   with all nodes do (
+      clearbindings;
+      if(#labname == ((c:focus)::#labname)) then (
+         nodeplane x 3.0 3.0;
+      ) else (
+         nodeplane x 0.0 0.0;
+      ) end;
+   ) end;
+   with c:focus do (nodeplane x 5.0 5.0) end;
+   ./gesture_selectlab;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_supersize(
+   with c:focus do itemsize 18.0 end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_masshive(
+   with c:focus do itemmass 68.0 end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub gesture_clearit(
+   with c:focus do (
+      itemmass 1.0;
+      itemsize 3.0;
+      clearbindings;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub setupGestures(
+   with all nodes do(
+      itemgesture lL gesture_selectlab "select lab";
+      
+      itemgesture r98 gesture_showloginchart "login chart";
+      itemgesture r96 gesture_showhoggingchart "hog chart";
+      itemgesture r93 gesture_showhourchart "hour chart";
+      itemgesture r91 gesture_clearchart "clear chart";
+      itemgesture r97 gesture_showfullhourchart "fullhours chart";
+      
+      itemgesture r74 gesture_centrefocus "inner focus";
+      itemgesture r78 gesture_planarfocus "planar focus";
+      itemgesture r79 gesture_sphericalfocus "outer focus";
+      itemgesture r73 resetPositionals "clear focus";
+      
+      itemgesture r46 gesture_collapse "collapse group";
+      
+      itemgesture r14 thinEdges "normal edges";
+      itemgesture r17 onlyThickEdges "thick edges";
+      itemgesture r12 arrowedEdges "arrowed edges";
+      itemgesture r13 labEdgeHighlighter "coded edges";
+      
+      itemgesture m632147896321478963214789 gesture_masshive "super repulse";
+      itemgesture m63214789 gesture_clearit "clear silly fx";
+      itemgesture m327864 gesture_supersize "super size";
+      //itemgesture rR632181236 gesture_supersize "woot";
+   ) end;
+   
+   with all aggregators do (
+      itemgesture r9 gesture_expand "expand group";
+   ) end;
+   
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:focus, and done on a node as a focus
+sub initiateGroup(
+   #labname <<group: c:focus;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub initiateGroups(
+   with all nodes as focus do (
+      with c:focus do (
+         ./initiateGroup;
+      ) end;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub initiateAggregators(
+   with all aggregators do (
+      itemcolor rgb:20 20 20;
+      itemsize 10.0;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// init
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//./highlightmenu;
+//./labmenu;
+//loadfile "data/migrationnew.vna";
+loadfile "data/migrationanalysed.vna";
+//loadfile "data/migration456.vna";
+./initiateGroups;
+./initiateAggregators;
+
+g_activecounter = 400000;
+g_pull = 0.02; 
+g_globeness = 0.0005; 
+g_diameter = 1.0;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./setupGestures;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef protip [16](
+   menucolor rgba: 60 0 0 100;
+   menutext "protip : right click and hold, on a node, to bring up the mouse menu.";
+   menulink "(hide)" (menuhide protip);
+);
+menushow protip;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+

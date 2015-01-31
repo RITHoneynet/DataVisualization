@@ -1,0 +1,13 @@
+Ready for GLSL
+Ready for OpenGL 2.0
+Framebuffer objects supported
+new frame buffer : 1
+log for shaders/Edgar.frag
+Fragment shader was successfully compiled to run on hardware.
+ 
+log for shaders/Edgar.vert
+Vertex shader was successfully compiled to run on hardware.
+ 
+program info log : 
+Vertex shader(s) linked, fragment shader(s) linked.
+

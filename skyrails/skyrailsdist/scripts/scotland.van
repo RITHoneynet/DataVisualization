@@ -1,0 +1,234 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./clearproject;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+loadfile "data/scotland.vna";
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+g_activecounter = 400000;
+g_pull = 0.2; 
+g_globeness = 0.0005; 
+g_diameter = 1.0;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+with all nodes do (
+   itemcolor ./lowNumberColorSplit [(num <- #category)];
+   itemsize 2.0;
+   switch #category do (
+      0 -> itemtexture name "textures/smiley.gif";
+      1 -> itemtexture name "textures/oil.gif";
+      2 -> itemtexture name "textures/railway.gif";
+      3 -> itemtexture name "textures/engineering.gif";
+      4 -> itemtexture name "textures/electricity.gif";
+      5 -> itemtexture name "textures/products.gif";
+      6 -> itemtexture name "textures/banks.gif";
+      7 -> itemtexture name "textures/insurance.gif";
+      8 -> itemtexture name "textures/investments.gif";
+   ) end;
+   nodelabel #fullname;
+) end;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef scotlandmenu [14](
+   menucolor rgba: 250 250 250 5;
+   menulink " select groups " (menushow corporatenavmenu);
+   menutooltip "show control panel for selecting corporate types";
+   menulink " select nodes " (menushow individualnavmenu);
+   menutooltip "show control panel for selecting individual companies";
+   menulink " attributes " (menushow attributesmenu);
+   menutooltip "show attribute highlighting panel";
+   menulink " information " (menushow infomenu);
+   menutooltip "learn more about this file, authors and information";
+);
+menushow scotlandmenu;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef infomenu [16](
+   menucolor rgba: 30 30 30 50;
+   menutext " info : ";
+   menulink " 1 " ();
+   menutooltip "This dataset contains the corporate interlocks in Scotland in the beginning";
+   menutooltip "of the twentieth century (1904-5). In the nineteenth century, the industrial";
+   menutooltip "revolution brought Scotland railways and industrialization, especially heavy";
+   menutooltip "industry and textile industry. The amount of capital needed for these large";
+   menutooltip "scale undertakings exceeded the means of private families, so joint stock ";
+   menutooltip "ompanies were established, which could raise the required capital.";
+   
+   menulink " 2 " ();
+   menutooltip "Joint stock companies are owned by the shareholders, who are represented by";
+   menutooltip "a board of directors. This opens up the possibility of interlocking";
+   menutooltip "directorates. By the end of the nineteenth century, joint stock companies";
+   menutooltip "had become the predominant form of business enterprise at the expense of";
+   menutooltip "private family businesses. Families, however, still exercised control";
+   menutooltip "through ownership and directorships.";
+   
+   
+   menulink " 3 " ();
+   menutooltip "The data are taken from the book The Anatomy of Scottish Capital by John";
+   menutooltip "Scott and Michael Hughes. It lists the (136) multiple directors of the 108";
+   menutooltip "largest joint stock companies in Scotland in 1904-5: 64 non-financial firms,";
+   menutooltip "8 banks, 14 insurance companies, and 22 investment and property companies";
+   menutooltip "(Scotland.net). In this dataset, which was compiled from the Appendix of";
+   menutooltip "Scott & Hughes' book, note that two multiple directors (W.S. Fraser and C.D.";
+   menutooltip "Menzies) are affiliated with just one board so they are not multiple";
+   menutooltip "directors in the strict sense.";
+   
+   menulink " 4 " ();
+   menutooltip "The companies are classified according to industry type:";
+   menutooltip "oil & mining (oil barrel icon), railway (rail icon), engineering & steel";
+   menutooltip "(tools icon), electricity & chemicals (power plant icon), domestic products";
+   menutooltip "(gift icon), banks (bank icon), insurance (star icon) and investment (chart";
+   menutooltip "icon). In addition, there the total capital or deposits of the firms can be";
+   menutooltip "used to change the size of the node";
+
+   menutext " | ";
+   menulink " (hide) " (menuhide infomenu);
+   menutooltip "hide this menu";
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c: theid
+sub selectItem(
+   clearsel moo;
+   moo <<sel: c:theid;
+   usesel moo;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c:group
+sub selectGroup(
+   clearsel moo;
+   moo <<sel where #category == c:group;
+   usesel moo;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// functions
+// c:group
+sub searchByGroup (
+   menudef searchresults [ 17 ] (
+      menucolor rgba: 50 50 50 30;
+      with all nodes where #category == c:group do (
+         dynalink (" " + #fullname + " ") ("./selectItem [(theid <- \"" + itemid + "\")];");
+         menutooltip "center view on the " + #fullname + " node.";
+      ) end;
+      dynalink "(hide)" "menuhide searchresults";
+   );
+   menushow searchresults;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef corporatenavmenu [15](
+   menucolor rgba: 0 0 0 100;
+   menutext "select : ";
+   menulink " 1 " (./selectGroup[(group <- 1)] );
+   menutooltip "select the oil/mining group";
+   menulink " 2 " (./selectGroup[(group <- 2)] );
+   menutooltip "select the railway group";
+   menulink " 3 " (./selectGroup[(group <- 3)] );
+   menutooltip "select the engineering & steel group";
+   menulink " 4 " (./selectGroup[(group <- 4)] );
+   menutooltip "select the electricity & chemical group";
+   menulink " 5 " (./selectGroup[(group <- 5)] );
+   menutooltip "select the domestic product group";
+   menulink " 6 " (./selectGroup[(group <- 6)] );
+   menutooltip "select the banking group";
+   menulink " 7 " (./selectGroup[(group <- 7)] );
+   menutooltip "select the insurance group";
+   menulink " 8 " (./selectGroup[(group <- 8)] );
+   menutooltip "select the investment group";
+   
+   menulink " camera " (usesel none);
+   menutooltip "select none. back to free view camera";
+   
+   menutext " | ";
+   menulink " (hide) " (menuhide corporatenavmenu);
+   menutooltip "hide this menu";
+   
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef individualnavmenu [15](
+   menucolor rgba: 0 0 0 100;
+   menutext "search : ";
+   menulink " 1 " (./searchByGroup[(group <- 1)] );
+   menutooltip "navigate the oil/mining companies";
+   menulink " 2 " (./searchByGroup[(group <- 2)] );
+   menutooltip "navigate the railway companies";
+   menulink " 3 " (./searchByGroup[(group <- 3)] );
+   menutooltip "navigate the engineering & steel companies";
+   menulink " 4 " (./searchByGroup[(group <- 4)] );
+   menutooltip "navigate the electricity & chemical companies";
+   menulink " 5 " (./searchByGroup[(group <- 5)] );
+   menutooltip "navigate the domestic product companies";
+   menulink " 6 " (./searchByGroup[(group <- 6)] );
+   menutooltip "navigate the banking companies";
+   menulink " 7 " (./searchByGroup[(group <- 7)] );
+   menutooltip "navigate the insurance companies";
+   menulink " 8 " (./searchByGroup[(group <- 8)] );
+   menutooltip "navigate the investment companies";
+   
+   menulink " camera " (usesel none);
+   menutooltip "select none. back to free view camera";
+   
+   menutext " | ";
+   menulink " (hide) " (menuhide corporatenavmenu);
+   menutooltip "hide this menu";
+   
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub betweennessVertical(
+   with all nodes do nodeplane y (#"Betweenness" / 300.0 - 5.0) same end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub sizeWithCapitals(
+   with all nodes where #capital != 0 do itemsize sqrt(#capital / 200.0) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub sphericalByType(
+   with all nodes where #type == 1 do nodesphere (3d: 0 0 0) 8.0 0.4 true end;
+   with all nodes where #type == 2 do nodesphere (3d: 0 0 0) 10.0 0.4 true end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub lineColors(
+   with all edges do(
+      if((linktarget::#category) != 0) then (
+         itemcolor ./lowNumberColorSplit [(num <- linktarget::#category)];
+      ) end;
+      if((linkorigin::#category) != 0) then (
+         itemcolor ./lowNumberColorSplit [(num <- linkorigin::#category)];
+      ) end;
+      
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef attributesmenu [15](
+   menucolor rgba: 0 0 0 100;
+   menulink " betweenness " (./betweennessVertical);
+   menutooltip "arrange the nodes so that the height reflects betweenness.";
+   menutooltip "The undirected betweenness value is calculated using netdraw/";
+   
+   menulink " capitals " (./sizeWithCapitals);
+   menutooltip "set the company node sizes to reflect their total capitals";
+   
+   menulink " spherical " (./sphericalByType);
+   menutooltip "arrange all nodes to be positioned on the surface of a sphere.";
+   menutooltip "the executive's nodes will be placed on the ourside while the";
+   menutooltip "companies are put inside"; 
+   
+   menulink " lines " (./lineColors);
+   menutooltip "set line colors to reflect the company type.";
+   
+   menulink " reset " (with all nodes do (itemsize 2.0; clearbindings) end;
+                       with all edges do clearcolors end;);
+   menutooltip "clear all the positional bindings";
+   
+   menutext " | ";
+   menulink " (hide) " (menuhide attributesmenu);
+   menutooltip "hide this menu";
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////

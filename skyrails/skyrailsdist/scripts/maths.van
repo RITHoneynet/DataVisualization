@@ -1,0 +1,287 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./clearproject;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+                                                                        /*MMMM                      
+                                                                        MMMMMM                      
+                                                                        MMMMMM                      
+                                                                        MMMMMM                      
+                                                                        MMMMMM                      
+                                                                        MMMMMM                      
+                                                                        MMMMMM                      
+                                                                        MMMMMM                      
+       MMMMMMMMMMMMMMMMM                     MMMMMMMMMMMMMMMMZ          MMMMMM             MMMMMM   
+   MMMMMMMMMMMMMMMMMMMMMBMMM             MMMWMMMMMMMMMMMMMMMMMMMMM      MMMMMM           MMMMMM :   
+   MMMMMM@.rrrrrrrrrr MMMMMM           MSMMMMMMMM rrrrrr MMMMMMMMM7W    MMMMMM        .80MMMM 8     
+ 7 MMMMMMi            MSMMMM ,        ;MMMMMMaMMM        aMMBMMMMMMM    MMMMMM        0MMMMBM       
+ MMMMMM.                MMMMMM         MMMMMM                 MMMMMM    MMMMMM      7MMMMMM         
+                        MMMMMM      MMMMMMMMM                MMMMMMM    MMMMMM    MMMMMMM           
+                      MMMMMMMM      SMMMMMM                             MMMMMM  MMMMMM              
+       SMWWWWWWWWWWWWXMMMMMMMM      SMMMMMM                             MMMMMM2iMMMMMM.             
+   ;i. MMMMMMMMMMMMMMMS:MMMMMM      SMMMMMM                             MMMMMMMMMMMMMM2 .           
+   MMMMMMMMMMMMMMMMMMM  MMMMMM      SMMMMMM                             MMMMMMMMMMMMMMMMM           
+ MMMMMMMMa              MMMMMM      SMMMMMM                             MMMMMMMM  MMMMMMMMM         
+ MMMMMM                 MMMMMM      SMMMMMM                             MMMMMM      XMMMMMMMM       
+ZMMMM                   MMMMMM      SMMMMMM                             MMMMMM        ;MMMMMM       
+MMMMM                   MMMMMM      ZMMMMMM W                :8rrr2Z    MMMMMM        SMMMMMM 8     
+MMMMM                 : MMMMMM      8MMMMMMMM                BMMMMMM    MMMMMM        8MMMMMMMM :   
+MMMMM                 MMMMMMMM         MMMMMM                 MMMMMM    MMMMMM           MMMMMMMM   
+ MMMMMM             MMMMMMMMMMMM      2MMMMMMMMMM        MMMMMMMMMMM    MMMMMM             MMMMMMMM 
+ MMMMMMMMMMMMMMMMMMMMMMM  MMMMMMMMW      MMMMMMMMMMMMMMMMMMMMMMMMM      MMMMMM               MMMMMM 
+ .   0MMMMMMMMMMMMMM   .    0MMMMMZ          MMMMMMMMMMMMMMMMi          MMMMMM               MMMMM*/
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub setupnode(
+   if(#m == null) then(
+      m <<# c:m;
+      n <<# c:n;
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub increasecount(
+   if(#count == null) then(
+      count <<# 0;
+   ) end;
+   count <<# #count + 1;   
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub ack(
+
+   with(node: "ack " + c:m + " " + c:n) do (
+      ./setupnode;
+      ./increasecount;
+   ) end;
+
+   if (c:m == 0) then (
+      return c:n + 1;
+   ) end;
+   
+   if (c:n == 0) then (
+      with("ack " + c:m + " " + c:n -- calls -> "ack " + ((c:m) - 1) + " " + 1) do (
+         ./increasecount;
+      ) end;
+      return ./ack [(m <- c:m - 1; n <- 1 )];
+   ) end;
+   
+   with("ack " + c:m + " " + c:n -- calls -> "ack " + c:m + " " + (c:n - 1)) do (
+      ./increasecount;
+   ) end;
+   
+   [( temp <- ./ack [( n <- c:n - 1 )] )] with (
+      with("ack " + c:m + " " + c:n -- calls -> "ack " + (c:m - 1) + " " + c:temp) do (
+         ./increasecount;
+      ) end;
+      return ./ack [( m <- c:m - 1; n <- c:temp )];  
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+                        /*MMMMMMMMMMM                                                               
+               MMMMMMMMSMMMMMMMMMMMMM                                                               
+               MMMMMMMMMMMMMMMMMMMMMM                                                               
+               MMMMMMMMMMMMMMMMMMMMMM                                                               
+               MMMMMMMMMMMMM                                                                        
+               MMMMMMMMMMMMMX                                                                       
+           MWW7MMMMMMMMM ..2                                                                        
+           MMMMMMMMMMMMM                                                                            
+           MMMMMMMMMMMMM                                                                            
+           MMMMMMMMMMMMM                                                                            
+           MMMMMMMMMMMMM                                                                            
+           MMMMMMMMMMMMM                                                                            
+           MMMMMMMMMMMMM                                                                            
+           MMMMMMMMMMMMM                                                                            
+           MMMMMMMMMMMMM                                                                            
+           MMMMMMMMMMMMM                                                                            
+:........  MMMMMMMMMMMMM ........................B                                       7;........:
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                       MMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                                       @MMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMS                              MMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                               MMMMMMMMMMMMMMM
+MMMMMMMMMMZMMMMMMMMMMMMMSMMMMMMMMMMMMMMM0MMMMMMMMMMMMM.   i                      :   MMMMMMMMMMMMMaM
+           MMMMMMMMMMMMM                 2MMMMMMMMMMMMMMMMM                     MMMMMMMMMMMMMMMMMM  
+           MMMMMMMMMMMMM                 MMMMMMMMMMMMMMMMMM                      MMMMMMMMMMMMMMMMM  
+           MMMMMMMMMMMMM                      MMMMMMMMMMMMMMMMM             MMMMMMMMMMMMMMMMM,      
+           MMMMMMMMMMMMM                      MMMMMMMMMMMMMMMMM             MMMMMMMMMMMMMMMMM2      
+           MMMMMMMMMMMMM                      MMMBMMMMMMMMMMMMM             MMMMMMMMMMMMMMMMM8      
+           MMMMMMMMMMMMM                          MMMMMMMMMMMMM             MMMMMMMMMMMMM           
+           MMMMMMMMMMMMM                          MMMMMMMMMMMMM             MMMMMMMMMMMMM           
+           MMMMMMMMMMMMM                          MMMMMMMMMMMMMZMMMa    MMMaMMMMMMMMMMMMM           
+           MMMMMMMMMMMMM                          MMMMMMMMMMMMMMMMMZ    MMMMMMMMMMMMMMMMM           
+           MMMMMMMMMMMMM                          MMMMMMMMMMMMMMMMM     MMMMMMMMMMMMMMMMM           
+           MMMMMMMMMMMMM                              7MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM               
+           MMMMMMMMMMMMM                              MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM               
+           MMMMMMMMMMMMM                              ir.  MMMMMMMMMMMMMMMMMMMMM2 .:a               
+           MMMMMMMMMMMMM                                   MMMMMMMMMMMMMMMMMMMMM:                   
+           MMMMMMMMMMMMM                                   MMMMMMMMMMMMMMMMMMMMMS                   
+           MMMMMMMMMMMMM                                   MMMMMMMMMMMMMMMMMMMMMS                   
+           MMMMMMMMMMMMM                                   MMMMMMMMMMMMMMMMMMMMM.                   
+           MMMMMMMMMMMMM                              a@ZXrMMMMMMMMMMMMMMMMMMMMMBiZ8M               
+           MMMMMMMMMMMMM                              MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM               
+           MMMMMMMMMMMMM                              ;MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM               
+           MMMMMMMMMMMMM                          MMMMMMMMMMMMMMMMM     MMMMMMMMMMMMMMMMM,          
+           MMMMMMMMMMMMM                          MMMMMMMMMMMMMMMMM0    MMMMMMMMMMMMMMMMM           
+           MMMMMMMMMMMMM                          MMMMMMMMMMMMM7BWMX    MWW;MMMMMMMMMMMMM           
+           MMMMMMMMMMMMM                          MMMMMMMMMMMMM             MMMMMMMMMMMMM           
+           MMMMMMMMMMMMM                          MMMMMMMMMMMMM             MMMMMMMMMMMMM           
+           MMMMMMMMMMMMM                      MMMMMMMMMMMMMMMMM             MMMMMMMMMMMMMMMMMM      
+           MMMMMMMMMMMMM                      MMMMMMMMMMMMMMMMM             MMMMMMMMMMMMMMMMMr      
+           MMMMMMMMMMMMM                 ..   MMMMMMMMMMMMMZMMM             MMMBMMMMMMMMMMMMM7   r  
+           MMMMMMMMMMMMM                 MMMMMMMMMMMMMMMMMM                      MMMMMMMMMMMMMMMMM  
+           MMMMMMMMMMMMM                 XMMMMMMMMMMMMMMMMM                     MMMMMMMMMMMMMMMMMM  
+           MMMMMMMMMMMMM             MMMMMMMMMMMMMMMMM                               MMMMMMMMMMMMMMM
+           MMMMMMMMMMMMM             MMMMMMMMMMMMMMMMM                               MMMMMMMMMMMMMMM
+           MMMMMMMMMMMMM             MMMMMMMMMMMMMBMMM;                              MMMMMMMMMMMMMMM
+           MMMMMMMMMMMMM             MMMMMMMMMMMMM                                       0MMMMMMMM*/
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub nodeSizer (
+   with all nodes do (
+      itemsize 1.0 + #count * 0.07;
+      itemmass 1.0 + sqrt(#count * 0.04);
+      nodeinfo 0 ("count : " + #count);
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+sub edgeSizer (
+   with all edges do (
+      itemsize 1.0 + #count * 0.3;
+      [(number <- 100 - #count)] with (
+         itemcolor rgb: c:number (max c:number 60) (max c:number 60);
+      ) end;
+      //itemcolor rgb: (255 - #count * 3) 60 60;
+      nodeinfo 0 ("count : " + #count);
+   ) end;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/*M  SMMMMMMB S   SMMMMMMM :7        ; ZMMMMMMMMB i       MMMM  0MMMMMMMB S       MMMM           MMM
+MMMMMM    MMMMM  MMZ   MMMMMM      MMMMMMM    MMMMMMM     MMMMMMM     MMMMM       MMMM           MMM
+MMMMM      XMMMMMM       MMMMM     8MMM          MMMM     MMMMM        XMMMMM     MMMM           MMM
+MMM          MMMM         MMMM    MMMM.          :MMMM    MMMM           MMMM     MMMM           MMM
+MMM          MMMM         MMMM    MMMM S0WWWWWWBS MMMM    MMMM           MMMM     MMMM           MMM
+MMM          MMMM         MMMM    MMMMMMMMMMMMMMMMMMMM    MMMM           MMMM     MMMM           MMM
+MMM          MMMM         MMMM    MMMM                    MMMM           MMMM     MMMM           MMM
+MMM          MMMM         MMMM    MMMM                    MMMM           MMMM     MMMM           MMM
+MMM          MMMM         MMMM    MMMM8,         MWMMM    MMMM           MMMM     MMMM           MMM
+MMM          MMMM         MMMM     8MMM          MMMM     MMMM           MMMM     MMMMM        2MMMM
+MMM          MMMM         MMMM     MMMMMMM    MMMMMMM     MMMM           MMMM      aMMMMM     MMMMMM
+MMM,         MMMM         MMMM       ; ZMMMMMMMMB i       MMMM           MMMM      :; MMMMMMMMX  M*/
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// c: num
+sub selectAck(
+   clearsel moo; 
+   moo <<sel~ "ack " + c:num;
+   usesel moo;
+);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+menudef mathmenu [15](
+   menucolor rgba:0 0 0 100;
+   
+   menulink " turn on highlight " (./nodeSizer; ./edgeSizer);
+   menutooltip "set the node and edge size to reflect their call number.";
+   menutooltip "for example, the bigger the size of \"ack m n\", the more";
+   menutooltip "that particular function call has been called.";
+   
+   menulink " 0 " (./selectAck [( num <- 0 )]);
+   menutooltip "select ack 0 x nodes";
+   menulink " 1 " (./selectAck [( num <- 1 )]);
+   menutooltip "select ack 1 x nodes";
+   menulink " 2 " (./selectAck [( num <- 2 )]);
+   menutooltip "select ack 2 x nodes";
+   menulink " 3 " (./selectAck [( num <- 3 )]);
+   menutooltip "select ack 3 x nodes";
+   
+   menutext " | ";
+   
+   menulink " reset " (resetfx);
+   menutooltip "reset highlighting";
+);
+menushow mathmenu;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/*MMMMW                                                         SMMMMMMM,                           
+MMMMMMM                                                         SMMMMMMM             2MMMMMMMM      
+MMMMMMM                                                         aMMMMMMM.             MMMMMMMS      
+MMMMMMM                                                         MMMMMMMMS             MMMMMMMS      
+                                                                                      MMMMMMMS      
+                                                                                      MMMMMMMS      
+                                                                                      MMMMMMMS      
+                                                                                      MMMMMMMS      
+                                                                                      MMMMMMMS      
+                                                                                      MMMMMMM       
+MMMMMMM          MMMMMMMM     MMMMMMMMMMMMMMMM                  MMMMMMMMa    .MMMMMMMMMMMMMMMMMMMMMM
+MMMMMMM          MMMMMMMM   a @MMMMMMMMMMMMMMM  ..2             2MMMMMMM.     MMMMMMMMMMMMMMMMMMMMMM
+MMMMMMM          MMMMMMMM   MMMMMMMMMMMMMMMMMMMMMMMX            SMMMMMMM      MMMMMMMMMMMMMMMMMMMMMM
+MMMMMMM          MMMMMMMMMMMMM           MMMMMMMMMM             SMMMMMMM              MMMMMMM,      
+MMMMMMM          MMMMMMMMMMMMM:          MMMMMMMMMM  :          SMMMMMMM              MMMMMMMr      
+MMMMMMM          MMMMMMMMMMM               SMMMMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM              MMMMMMMS      
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM             2MMMMMMM       
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM                MMMMMMMM    
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM                MMMMMMMM    
+MMMMMMM          MMMMMMMM                     MMMMMMMM          SMMMMMMM                MMMMMMMMMMMM
+MMMMMMW          MMMMMMMM                     MMMMMMMM          SMMMMMMM,                    .MMMM*/
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+./ack [(m <- 3; n <- 5)];
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+g_activecounter = 400000;
+g_pull = 4.0; 
+g_globeness = 0.4; 
+g_diameter = 17.0;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////

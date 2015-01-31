@@ -1,0 +1,574 @@
+////////////////// def values ////////////////////////////////////////////////////
+// default values
+g_activecounter = 400000;
+g_pull = 0.02; 
+g_globeness = 0.0005; 
+g_diameter = 1.0;
+setfov 90.0;
+//g_usex27 = false;
+setinversion false;
+//g_sb_brightness = 1.0;
+setskybox "matrix" "jpg";
+////////////////// menu file for skyrails ////////////////////////////////////////////////////
+
+one -- links -> two;
+two -- links -> three;
+three -- links -> one;
+
+g1 <<group: one;
+g1 <<group: two;
+g1 <<group: three;
+
+////////////////// menu file for skyrails ////////////////////////////////////////////////////
+sub theme_normalcolor (
+   setskybox "fae04dark" "jpg";
+   g_sb_brightness = 0.2;
+   
+   colortheme "cirrusColor"             rgb: 100 100 100   ;
+   colortheme "solidColor1"             rgb: 30 30 30   ;
+   colortheme "solidColor2"             rgb: 50 50 50   ;
+   colortheme "uiForeColor"             rgb: 150 150 150   ;
+   colortheme "uiHighColor"             rgb: 190 180 130   ;
+   colortheme "actionColor"             rgb: 0 90 0   ;
+   colortheme "importantColor"          rgb: 90 60 0   ;
+   
+   colortheme "selColor"                rgb: 25 63 75   ;
+   colortheme "selFontColor"            rgb: 0 0 0   ;
+   colortheme "activeBlinkColor"        rgb: 0 220 220   ;
+   colortheme "linkHoverBackColor"      rgb: 0 0 0   ;
+   colortheme "linkHoverColor"          rgb: 100 255 255   ;
+   colortheme "linkPressBackColor"      rgb: 0 125 175   ;
+   colortheme "linkPressColor"          rgb: 0 0 0   ;
+   
+   colortheme "tooltipTextColor"        rgb: 100 100 100   ;
+   colortheme "tooltipBackColor"        rgba: 0 0 120 190  ;
+   
+   colortheme "x27ActiveBoxColor"       rgb: 37 37 50   ;
+   colortheme "x27InactiveBoxColor"     rgb: 37 37 37   ;
+   
+   colortheme "defaultNodeColor"        rgb: 0 200 0   ;
+   colortheme "defaultNodeLabelColor"   rgb: 200 200 200   ;
+   
+   colortheme "defaultLineColor"        rgb: 0 60 60   ;
+   colortheme "defaultAlphaLineColor"   rgb: 0 0 50 ;
+   
+   colortheme "selectNodeColor"        rgb: 200 50 0   ;
+   colortheme "selectNodeLabelColor"   rgb: 225 100 50   ;
+   
+   colortheme "selectLineColor"        rgb: 100 60 60   ;
+   colortheme "selectAlphaLineColor"   rgb: 50 0 0 ;
+   
+   colortheme "nodeHoverColor"        rgb: 0 0 0   ;
+   colortheme "mouseGestureColor"     rgb: 0 255 255 ;
+   colortheme "mouseGuideColor"       rgb: 150 150 150 ;
+   
+);
+
+sub theme_desertcolor (
+   setskybox "desert" "jpg";
+   g_sb_brightness = 0.3;
+   
+   colortheme "cirrusColor"             rgb: 0 0 0   ;
+   colortheme "solidColor1"             rgb: 0 0 0   ;
+   colortheme "solidColor2"             rgb: 20 10 0   ;
+   colortheme "uiForeColor"             rgb: 150 150 150   ;
+   colortheme "actionColor"             rgb: 0 90 0   ;
+   colortheme "importantColor"          rgb: 90 60 0   ;
+   
+   colortheme "selColor"                rgb: 75 63 25   ;
+   colortheme "selFontColor"            rgb: 0 0 0   ;
+   colortheme "activeBlinkColor"        rgb: 220 220 170   ;
+   colortheme "linkHoverBackColor"      rgb: 0 0 0   ;
+   colortheme "linkHoverColor"          rgb: 170 170 130   ;
+   colortheme "linkPressBackColor"      rgb: 175 125 0   ;
+   colortheme "linkPressColor"          rgb: 0 0 0   ;
+   
+   colortheme "tooltipTextColor"        rgb: 100 100 0   ;
+   colortheme "tooltipBackColor"        rgba: 0 0 0 220 ;
+   
+   colortheme "x27ActiveBoxColor"       rgb: 50 37 37   ;
+   colortheme "x27InactiveBoxColor"     rgb: 37 37 37   ;
+   
+   colortheme "defaultNodeColor"        rgb: 0 0 0   ;
+   colortheme "defaultNodeLabelColor"   rgb: 200 180 0   ;
+   
+   colortheme "defaultLineColor"        rgb: 0 0 0   ;
+   colortheme "defaultAlphaLineColor"   rgb: 0 0 0 ;
+   
+   colortheme "selectNodeColor"        rgb: 20 20 20   ;
+   colortheme "selectNodeLabelColor"   rgb: 200 200 200   ;
+   
+   colortheme "selectLineColor"        rgb: 70 70 0   ;
+   colortheme "selectAlphaLineColor"   rgb: 30 30 0 ;
+   
+   colortheme "nodeHoverColor"        rgb: 80 0 0   ;
+   colortheme "mouseGestureColor"     rgb: 255 180 0 ;
+   colortheme "mouseGuideColor"       rgb: 190 0 0 ;
+   
+);
+
+sub theme_natural (
+   setskybox "valley" "jpg";
+   g_sb_brightness = 0.3;
+   colortheme "selColor"                rgb: 75 63 25   ;
+   colortheme "selFontColor"            rgb: 0 0 0   ;
+   colortheme "activeBlinkColor"        rgb: 220 220 170   ;
+   colortheme "linkHoverBackColor"      rgb: 0 0 0   ;
+   colortheme "linkHoverColor"          rgb: 170 170 130   ;
+   colortheme "linkPressBackColor"      rgb: 175 125 0   ;
+   colortheme "linkPressColor"          rgb: 0 0 0   ;
+   
+   colortheme "tooltipTextColor"        rgb: 100 100 100   ;
+   colortheme "tooltipBackColor"        rgba: 90 20 10 160 ;
+   
+   colortheme "x27ActiveBoxColor"       rgb: 50 50 37   ;
+   colortheme "x27InactiveBoxColor"     rgb: 37 37 37   ;
+   
+   colortheme "defaultNodeColor"        rgb: 70 0 0   ;
+   colortheme "defaultNodeLabelColor"   rgb: 200 180 0   ;
+   
+   colortheme "defaultLineColor"        rgb: 40 40 40   ;
+   colortheme "defaultAlphaLineColor"   rgb: 0 0 0 ;
+   
+   colortheme "selectNodeColor"        rgb: 100 100 0   ;
+   colortheme "selectNodeLabelColor"   rgb: 200 200 200   ;
+   
+   colortheme "selectLineColor"        rgb: 80 0 0   ;
+   colortheme "selectAlphaLineColor"   rgb: 0 0 0 ;
+   
+   colortheme "nodeHoverColor"        rgb: 0 0 0   ;
+   colortheme "mouseGestureColor"     rgb: 255 255 0 ;
+   colortheme "mouseGuideColor"       rgb: 150 150 150 ;
+   
+);
+
+sub theme_openspace (
+   setskybox "sunrise" "jpg";
+   g_sb_brightness = 0.3;
+   colortheme "selColor"                rgb: 25 63 75   ;
+   colortheme "selFontColor"            rgb: 0 0 0   ;
+   colortheme "activeBlinkColor"        rgb: 170 170 220   ;
+   colortheme "linkHoverBackColor"      rgb: 0 0 0   ;
+   colortheme "linkHoverColor"          rgb: 170 170 170   ;
+   colortheme "linkPressBackColor"      rgb: 0 125 170   ;
+   colortheme "linkPressColor"          rgb: 0 0 0   ;
+   
+   colortheme "tooltipTextColor"        rgb: 100 100 100   ;
+   colortheme "tooltipBackColor"        rgba: 0 0 0 160 ;
+   
+   colortheme "x27ActiveBoxColor"       rgb: 37 37 37   ;
+   colortheme "x27InactiveBoxColor"     rgb: 37 37 37   ;
+   
+   colortheme "defaultNodeColor"        rgb: 20 20 20   ;
+   colortheme "defaultNodeLabelColor"   rgb: 0 180 200   ;
+   
+   colortheme "defaultLineColor"        rgb: 0 0 0   ;
+   colortheme "defaultAlphaLineColor"   rgb: 0 0 10 ;
+   
+   colortheme "selectNodeColor"        rgb: 20 20 20   ;
+   colortheme "selectNodeLabelColor"   rgb: 200 200 200   ;
+   
+   colortheme "selectLineColor"        rgb: 0 0 80   ;
+   colortheme "selectAlphaLineColor"   rgb: 0 0 0 ;
+   
+   
+   colortheme "nodeHoverColor"        rgb: 0 0 0   ;
+   colortheme "mouseGestureColor"     rgb: 180 180 255 ;
+   colortheme "mouseGuideColor"       rgb: 150 150 150 ;
+   
+);
+
+////////////////// main menu  ////////////////////////////////////////////////////
+
+with ui:bottomdock do (
+   color (@solid, 0.6);
+   settexture (@ "uitexes/largebuttonbox.png");
+   setmargin (@50);
+   maketextlet (@ dockicons);
+   
+   ui:dockicons ::> (
+      menuicon "graphrun" "icons/gears.gif";
+      mi:rotspeed 2.0;
+      
+      //menulink " projects " (menushow projectsmenu);
+      menuicon "projects" "icons/open.gif";
+      mi:link (menushow projectsmenu);
+      mi:tooltip "show available projects";
+      mi:tooltip "to get your own projects working in skyrail, look at the scripts file";
+      
+      //menulink " settings " (menushow settingsmenu);
+      menuicon "settings" "icons/tools.gif";
+      mi:link (menushow settingsmenu);
+      mi:tooltip "show miscellaneous settings panel";
+      
+      //menulink " themes " (menushow themesmenu);
+      menuicon "themes" "icons/eye.gif";
+      mi:link (menushow themesmenu);
+      mi:tooltip "show themes panel";
+      
+      //menulink " help " (menushow helpmenu);
+      menuicon "help" "icons/question.gif";
+      mi:link (menushow helpmenu);
+      mi:tooltip "view help and tips";
+      
+      //menulink " credits " (menushow creditsmenu);
+      menuicon "credits" "icons/credits.gif";
+      mi:link (menushow creditsmenu);
+      mi:tooltip "view credits";
+   );
+   
+) end;
+
+menudef mainmenu [5](
+   menucolor rgba: 250 250 250 5;
+   
+   //menuicon "graph" "icons/graph.gif";
+   //mi:link (menushow graphsettingsmenu);
+   //mi:tooltip "show graph control panel";
+   
+   menuicon "graphrun" "icons/gears.gif";
+   mi:rotspeed 2.0;
+   
+   //menulink " projects " (menushow projectsmenu);
+   menuicon "projects" "icons/open.gif";
+   mi:link (menushow projectsmenu);
+   mi:tooltip "show available projects";
+   mi:tooltip "to get your own projects working in skyrail, look at the scripts file";
+   
+   //menulink " settings " (menushow settingsmenu);
+   menuicon "settings" "icons/tools.gif";
+   mi:link (menushow settingsmenu);
+   mi:tooltip "show miscellaneous settings panel";
+   
+   //menulink " themes " (menushow themesmenu);
+   menuicon "themes" "icons/eye.gif";
+   mi:link (menushow themesmenu);
+   mi:tooltip "show themes panel";
+   
+   //menulink " help " (menushow helpmenu);
+   menuicon "help" "icons/question.gif";
+   mi:link (menushow helpmenu);
+   mi:tooltip "view help and tips";
+   
+   //menulink " credits " (menushow creditsmenu);
+   menuicon "credits" "icons/credits.gif";
+   mi:link (menushow creditsmenu);
+   mi:tooltip "view credits";
+);
+
+//menushow mainmenu;
+
+sub prelude_freezegraph(
+   menuline 5;
+   mi:select "graphrun";
+   mi:rotspeed 0.0;
+   mi:link (./prelude_rungraph);
+   mi:tooltip "The graph layout system is not running";
+   mi:tooltip "Click this icon to activate the graph layout system";
+   g_activecounter = 20;
+);
+
+sub prelude_rungraph(
+   menuline 5;
+   mi:select "graphrun";
+   mi:rotspeed 2.0;
+   mi:link (./prelude_freezegraph);
+   mi:tooltip "The graph layout system is currently running";
+   mi:tooltip "Click this icon to freeze the graph layout system";
+   g_activecounter = 4000000;
+);
+
+./prelude_rungraph;
+
+////////////////// graph menu  ////////////////////////////////////////////////////
+menudef helpmenu [6](
+   menucolor rgba: 0 0 0 150;
+   menutext " help : ";
+   menulink " 1 " ();
+   menutooltip "Everything should be self documenting (the menus etc).";
+   menutooltip "Controls are \"w,s,a,d\" for moving the camera. mouse";
+   menutooltip "can be used to move the camera around";
+
+   menulink " 2 " ();
+   menutooltip "If you press \"~\", you can see the console. I have";
+   menutooltip "implemented a context sensitive language. But normal";
+   menutooltip "users won't have to worry about programming them or";
+   menutooltip "anything like that, because the menus (which are";
+   menutooltip "driven by the language) can take care of everything";
+   menutooltip "for you.";
+   
+   menulink " 3 " ();
+   menutooltip "however, do look in the scripts directory, and you will";
+   menutooltip "find that the languages themselves are very simple to";
+   menutooltip "understand.";
+   
+   menulink " 4 " ();
+   menutooltip "This program can easily read values from vna file format,";
+   menutooltip "and the pajek .net format. Extra work was about to be";
+   menutooltip "spent creating other parsers, until I realised that";
+   menutooltip "netdraw lets you convert formats from one to another";
+   menutooltip "rather easily.";
+   
+   menulink " 5 " ();
+   menutooltip "This system can't do much analysis of the data imported.";
+   menutooltip "The functionality is concentrated around visualisation.";
+   menutooltip "This can be seen from the example script files. The";
+   menutooltip "rationale is that there already exists many analysis";
+   menutooltip "tools that lets you do that already, and they do that well.";
+   
+   menulink " 5b " ();
+   menutooltip "in short, this system was meant to be a \"social network";
+   menutooltip "presentation system\". An expert user can create a script";
+   menutooltip "which sets all the menus, ready for a viewer to explore";
+   menutooltip "with relative ease.";
+   
+   menulink " 6 " ();
+   menutooltip "For now, please enjoy the program. I am currently looking";
+   menutooltip "for extra data to present, so if you would like to see";
+   menutooltip "your data in the samples distribution, please send them";
+   menutooltip "to me along with descriptions and attributes you'd like";
+   menutooltip "to see highlighted etc. I'll be more than happy to set";
+   menutooltip "things up (of course, depends on the available time :)";
+   
+   menulink " (hide) " (menuhide helpmenu);
+   menutooltip "hide this panel";
+);
+////////////////// graph menu  ////////////////////////////////////////////////////
+menudef creditsmenu [6](
+   menucolor rgba: 0 0 0 150;
+   menutext " credits : ";
+   menulink " 1 " ();
+   menutooltip "Skyrails social network visualisation system.";
+   menutooltip "This is basically my (undergraduate) thesis project.";
+   menutooltip "Built using opengl. Uses the xml parser library found in: ";
+   menutooltip "http://www.applied-mathematics.net/tools/xmlParser.html";
+   menutooltip "didn't find too many graphml files, but the library was awesome.";
+
+   menulink " 2 " ();
+   menutooltip "libSVL was also used as a vector library (for the graphics engine).";
+   menutooltip "http://www.cs.cmu.edu/~ajw/doc/svl.html";
+   menutooltip "glew and SDL is used to help with graphics.";
+   
+   menulink " 3 " ();
+   menutooltip "some of the textures and skyboxes were found lying around and I";
+   menutooltip "can't remember any of the sources except for:";
+   menutooltip "http://www.redgalaxy.net/node/165";
+   
+   menulink " 4 " ();
+   menutooltip "And a lot of the people at INSNA were very helpful with";
+   menutooltip "providing data for this project. Although with the first";
+   menutooltip "release there was only so few put as a sample (it takes";
+   menutooltip "more effort than i thought to prepare them..).";
+   
+   menulink " 5 " ();
+   menutooltip "And then also, thanks to Tim Lambert for being a flexible";
+   menutooltip "supervisor, agreeing to a thesis topic change few weeks";
+   menutooltip "before the due date.";
+   
+   menulink " 5 " ();
+   menutooltip "The programming language's context system is based on";
+   menutooltip "John Plaice's translucid language. Very powerful concept.";
+   
+   menulink " 6 " ();
+   menutooltip "And the people at CSE for providing plenty of input with";
+   menutooltip "the system. You all know who you are. Cheers";
+   
+   menulink " (hide) " (menuhide creditsmenu);
+   menutooltip "hide this panel";
+);
+////////////////// graph menu  ////////////////////////////////////////////////////
+menudef projectsmenu [6](
+   menucolor rgba: 0 0 0 150;
+   menutext " files : ";
+   menulink " labs " (loadfile "scripts/labs.van"; menuhide projectsmenu);
+   menutooltip "CSE Lab Migration Pattern, by Yose Widjaja";
+   menutooltip "This graph shows the migration pattern (changing computer within 15 minutes) of the UNSW CSE undergraduate lab.";
+   menutooltip "Extracted from 2006 user login data, provided by CSE System Support.";
+   menulink " maths " (loadfile "scripts/maths.van"; menuhide projectsmenu);
+   menutooltip "Ackermann function call graph. see how it looks like here.";
+   menulink " trades " (loadfile "scripts/worldtradefull.van"; menuhide projectsmenu);
+   menutooltip "Country trade graph. by Lothar Krempel";
+   menutooltip "Trade networks of selected countries. Country attributes added using data from the United Nations statistics website";
+   menulink " macaques " (loadfile "scripts/macaque.van"; menuhide projectsmenu);
+   menutooltip "Macaque domination graph, 1991";
+   menutooltip "Dominance in a colony of 62 adult female japanese macaques";
+   menulink " cseacad " (loadfile "scripts/cseacad.van"; menuhide projectsmenu);
+   menutooltip "CSE Academic collaboration graph";
+   menutooltip "with the 1995 - 2006 data";
+   menutooltip "Adapted from pajek dataset compiled by W. de Nooy, 2001.";   
+   menulink " scotland " (loadfile "scripts/scotland.van"; menuhide projectsmenu);
+   menutooltip "Corporate interlocks in Scotland (1904-5)";
+   menutooltip "Original Authors : John Scott and Michael Hughes";
+   menutooltip "Adapted from pajek dataset compiled by W. de Nooy, 2001.";   
+   menulink " medici " (loadfile "scripts/medicis.van"; menuhide projectsmenu);
+   menutooltip "Marriage and business relational network of powerful families in";
+   menutooltip "renaissance Florentine.";
+   menutooltip "Adapted from pajek dataset compiled by W. de Nooy, 2001.";   
+   menulink " naruto " (loadfile "scripts/naruto.van"; menuhide projectsmenu);
+   menutooltip "Incomplete graph of naruto character relations.";
+   menutooltip "Work in progress. Just something out of boredom. And for testing things.";
+   menulink " p2p " (loadfile "scripts/p2pnetwork.van"; menuhide projectsmenu);
+   menutooltip "Network Simulation Frontend";
+   menutooltip "This only works when there's a system to connect to.";
+   menulink " mds " (loadfile "scripts/mds.van"; menuhide projectsmenu);
+   menutooltip "Monasterio De Sal frontend";
+   menutooltip "Monasterio De Sal : c/c++ code file manager";
+   menulink " nowacki " (loadfile "scripts/medicallib.van"; menuhide projectsmenu);
+   menutooltip "Jonathan Nowacki's project";
+   menutooltip "Not really public, don't worry, nobody else will see this project";
+   menulink " (hide) " (menuhide projectsmenu);
+   menutooltip "hide projects panel";
+  
+);
+////////////////// graph menu  ////////////////////////////////////////////////////
+menudef graphsettingsmenu [6](
+   menucolor rgba: 0 0 0 150;
+   menutext " modes : ";
+   menulink " freeze " (
+      g_activecounter = 100
+   );
+   menutooltip "freeze the graph";
+   menulink " unfreeze " (
+      g_activecounter = 400000
+   );
+   menutooltip "unfreeze the graph";
+   menulink " structural " (
+      g_pull = 0.02; 
+      g_globeness = 0.0005; 
+      g_diameter = 1.0;
+   );
+   menutooltip "activate standard structural layout";
+   menulink " globular " (
+      g_pull = 0.02; 
+      g_globeness = 0.05; 
+      g_diameter = 12.0
+   );
+   menutooltip "activate standard globular layout";
+   menulink " (hide) " (menuhide graphsettingsmenu);
+   menutooltip "hide graph panel";
+);
+////////////////// descriptions menu  ////////////////////////////////////////////////////
+menudef settingsmenu [6](
+   menucolor rgba: 00 00 00 150;
+   menutext " ";
+   /*
+   menulink "x27draw:" ();
+   menutooltip "The graph drawing utilises the FADE algorithm, where nodes are ";
+   menutooltip "stored into a space partitioning tree to increase efficiency in ";
+   menutooltip "layouting. Due to design choices, a 27 tree (3x3x3, or x27) is ";
+   menutooltip "used, and hence this name is used";
+   menulink "on" (
+      g_drawx27 = true;
+   );
+   menutooltip "enable x27 drawing";
+   menutext "|";
+   menulink "off" (
+      g_drawx27 = false;
+   );
+   menutooltip "disable x27 drawing";
+   
+//   menulink " FADE:" ();
+   //menutooltip "Turn on / off the FADE algorithm. Benefits don't kick in until";
+   //menutooltip "a lot of nodes come.";
+   menulink "on" (
+      g_usex27 = true;
+   );
+   menutooltip "enable FADE";
+   menutext "|";
+   menulink "off" (
+      g_usex27 = false;
+   );
+   menutooltip "disable FADE";
+   */
+   menulink " fov:" ();
+   menutooltip "set the field of view / zoom level";
+   menulink "15" (setfov 15.0);
+   menutext "|";
+   menulink "25" (setfov 25.0);
+   menutext "|";
+   menulink "45" (setfov 45.0);
+   menutext "|";
+   menulink "65" (setfov 65.0);
+   menutext "|";
+   menulink "90" (setfov 90.0);
+   menutext "|";
+   menulink "115" (setfov 115.0);
+   
+   menulink " inv:" ();
+   menutooltip "inversion of colours";
+   menulink "on" ( setinversion true; );
+   menutext "|";
+   menulink "off" ( setinversion false; );
+   
+   menulink " (hide) " (menuhide settingsmenu);
+   menutooltip "hide settings panel";
+);
+////////////////// help menu  ////////////////////////////////////////////////////
+menudef themesmenu [6] (
+   menucolor rgba: 0 0 0 150;
+   menutext " themes : ";
+   menulink " normal " (./theme_normalcolor);
+   menutooltip "The default theme. Modern space theme.";
+   menulink " desert " (./theme_desertcolor);
+   menutooltip "Artistically red theme. Highly visible horizon.";
+   menulink " valley " (./theme_natural);
+   menutooltip "Natural theme. Valley background.";
+   menulink " openspace " (./theme_openspace);
+   menutooltip "Open space theme. Refreshingly open.";
+   menulink " (hide) " (menuhide themesmenu);
+   menutooltip "hide themes panel.";
+);
+
+////////////////// init ////////////////////////////////////////////////////
+
+////////////////// utilfunctions ////////////////////////////////////////////////////
+// c:estmax
+// c:num
+sub colorOnNumber(
+   [( divor <- toint(c:estmax / 3.0);
+      stepper <- toint(300 / c:estmax))] with (
+      return rgb: (c:num * c:"stepper") ((c:num - c:divor) * c:stepper) ((c:num - 2*c:divor) * c:stepper);
+   ) end;
+);
+////////////////// init ////////////////////////////////////////////////////
+sub lowNumberColorSplit(
+   switch (c:num) do(
+      0 -> return rgb: 50 50 50;
+      1 -> return rgb: 100 0 0;
+      2 -> return rgb: 0 100 0;
+      3 -> return rgb: 0 30 100;
+      4 -> return rgb: 100 100 0;
+      5 -> return rgb: 0 100 40;
+      6 -> return rgb: 100 0 100;
+      7 -> return rgb: 180 0 60;
+      8 -> return rgb: 60 0 180;
+      9 -> return rgb: 180 60 0;
+      10 -> return rgb: 60 180 0;
+   ) end;
+);
+////////////////// init ////////////////////////////////////////////////////
+sub clearproject(
+   cleargraph;
+   for i <- 10..20 do (
+      menuclear c:i;
+   ) end;
+);
+////////////////// init ////////////////////////////////////////////////////
+sub prelude_selectfocus(
+   usesel moo;
+   clearsel moo;
+   moo <<sel: c:focus;
+);
+////////////////// init ////////////////////////////////////////////////////
+sub prelude_selectadditive(
+   usesel moo;
+   moo <<sel: c:focus;
+);
+////////////////// init ////////////////////////////////////////////////////
+sub prelude_usecamera(
+   usesel none;
+);
+////////////////// init ////////////////////////////////////////////////////
+
+loadfile "scripts/uitest.van"
+

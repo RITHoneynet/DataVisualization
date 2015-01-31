@@ -11,4 +11,6 @@ I have also Included a sample config file `gltail_locale.yaml`. This is set up t
 ## Skyrails
 The Python script used to send data to skyrail requires the `python-sshtail` library to run. You can find it at https://github.com/praekelt/python-sshtail.
 
+I have received permission form Yose Widjaja(the developer of Skyrails) to share the copy of the program that I have. You can find it inside the skyrails folder. Note that these are binaries for the program. The source code is currently not available. Windows is required to run it, but I have had some luck with running with wine on linux. I have also had it work well in a VM.
+
 I will be adding some documentation on what I learned about the Skyrails scripting language at a later date.
