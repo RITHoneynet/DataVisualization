@@ -16,4 +16,4 @@ I have received permission form Yose Widjaja(the developer of Skyrails) to share
 I will be adding some documentation on what I learned about the Skyrails scripting language at a later date.
 
 ## Tools
-The `replay_bro_log.py` script is a useful tool to test real time data visualization. Ryan Peck developed this script for me to use with my testing. It reads Bro logs and will rewrite each line to a new file with a delay according to the timestamp.
+The `replay_bro_log.py` script is a useful tool to test real time data visualization. [Ryan Peck](https://github.com/RyPeck) developed this script for me to use with my testing. It reads Bro logs and will rewrite each line to a new file with a delay according to the timestamp.
